@@ -1,0 +1,71 @@
+Segundo Sprint
+
+    NavBar
+        1-Terminar el navbar y tener todas las secciones
+        2-Poner todas las secciones blod blanco
+        3-Cuando se ponga blanco cambiar a negro
+
+    Sobre mi
+        Nada
+
+    Experiencia
+        1-Corregir formato de el titulo
+        2-Corregir Experiencia y Estudio
+
+    Habilidades
+        1-Corregir las Habilidades reales
+        2-Poner las nubes encima con framer motion
+
+    Tecnologías
+        #1-Crear los item de tecnologías copiando el badge de heroui
+        #2-Poner todas las tecnologías
+        #3-Todo con el efecto blanco brilloso
+        4-Darle color a los iconos usando prompt
+
+    Proyectos
+        1-Crear los items Card
+        2-Poner los proyectos sin su navegacion
+        3-Proyectos:
+            1-VivoFacil
+            2-Tesis
+            3-Plugin Shopify
+            4-DocAI
+            5-CompraChat
+            6-gaming-coach.ai
+        4-Añadir las tags
+
+    Contacto
+        1-Terminar el contacto y redes sociales
+
+Tercer Sprint(Incluir Azul)
+    Tecnologías
+        1-usar popuber de heroui en las tecnologías y ponerles description
+
+React
+Vue
+Tailwind
+Boostrap
+MUI
+HeroUi
+Shadcn
+Nextjs
+Nextjs
+Astro
+Remix
+Python
+FastAPI
+Django
+Pandas
+Celery
+Java
+Sping-Boot
+KNIME
+MongoDB
+Postgres
+Redis
+MySql
+Openai
+Huggin-Face
+Flutter
+Puppeter
+Selenium

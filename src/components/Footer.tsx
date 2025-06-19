@@ -7,7 +7,7 @@ interface FooterProps {
 }
 
 const Footer: React.FC<FooterProps> = ({
-  copyrightText = `© ${new Date().getFullYear()} Epitome. Todos los derechos reservados.`,
+  copyrightText = `© ${new Date().getFullYear()} Todos los derechos reservados.`,
   attributionLink = "#",
   attributionText = "Diseñado con ♥"
 }) => {
@@ -19,14 +19,7 @@ const Footer: React.FC<FooterProps> = ({
             {copyrightText}
           </p>
           
-          <a 
-            href={attributionLink}
-            className="text-sm text-gray-600 hover:text-secondary transition-colors"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            {attributionText}
-          </a>
+          
         </div>
       </div>
     </footer>
