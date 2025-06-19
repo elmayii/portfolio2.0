@@ -8,132 +8,144 @@ import Skills from '../components/Skills';
 import Projects from '../components/Projects';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
+import LazyShow from '../components/LazyShow'
+import Canvas from '../components/Canvas/Canvas'
 
 // Datos para los componentes
 const navItems = [
   { name: 'Inicio', url: '#intro' },
   { name: 'Sobre Mí', url: '#about' },
-  { name: 'Servicios', url: '#skills' },
+  { name: 'Experiencia', url: '#experience' },
+  { name: 'Habilidades', url: '#skills' },
+  { name: 'Tecnologías', url: '#stack'},
   { name: 'Proyectos', url: '#works' },
   { name: 'Contacto', url: '#contact' }
 ];
 
 const workExperience = [
   {
-    title: 'Estudio Increíble',
-    role: 'Diseñador Principal',
-    period: 'Julio 2018 - Presente',
-    description: 'Desarrollo de identidades de marca, diseño web y estrategias digitales para clientes de diversos sectores.'
+    title: 'QA BIT',
+    role: 'Ingeniero de Software',
+    period: 'Septiembre 2024 - Presente',
+    description: '•	Desarrollo y mantenimiento de aplicaciones web con NestJS y NextJs.\n •	Integración de módulos de inteligencia artificial para optimizar la experiencia y eficiencia de las aplicaciones.\n •	Colaboración con equipos multidisciplinarios para implementar soluciones innovadoras.'
   },
   {
-    title: 'Agencia Super Cool',
-    role: 'Desarrollador Frontend',
-    period: 'Julio 2017 - Junio 2018',
-    description: 'Implementación de interfaces de usuario y desarrollo de sitios web responsivos utilizando las últimas tecnologías.'
+    title: 'Freelancer',
+    role: 'Team Leader y Arquitecto de Software',
+    period: 'Abril 2024 - Septiembre 2024',
+    description: '•	Lideré proyectos de principio a fin, definiendo la arquitectura y estrategias de desarrollo para diversos clientes.\n•	Coordiné equipos de desarrollo, gestionando la implementación tanto en front-end (NextJs) como en back- end (Nestjs).\n•	Supervisé la integración de pipelines de CI/CD y automatización en entornos cloud, garantizando despliegues de alta calidad.'
   },
   {
-    title: 'Estudio de Diseño Épico',
-    role: 'Desarrollador Frontend',
-    period: 'Marzo 2016 - Junio 2017',
-    description: 'Creación de experiencias web interactivas y desarrollo de aplicaciones web para clientes importantes.'
+    title: 'Enjoy Travel Group',
+    role: 'Desarrollador Full-Stack',
+    period: 'Junio 2022 - Marzo 2024',
+    description: '•	Desarrollo de aplicaciones web con un fuerte enfoque en Django y NextJS, optimizando tanto el rendimiento del front-end como la robustez del back-end.\n•	Lideré el equipo de desarrollo, practicando metodologías agiles y gestionando las contribuciones al codigo, además de la documentación de los proyectos.\n•	Proyecto destacado: Plataforma integral de reservas y gestión turística, gestión de vuelos y seguros, integrando APIs de terceros y análisis de datos en tiempo real.'
+  },
+  {
+    title: 'Guajirito SRL',
+    role: 'Desarrollador Full-Stack Junior',
+    period: 'Octubre 2021 - Marzo 2022',
+    description: '•	Implementación de interfaces dinámicas con React para el front-end y desarrollo de back-end con Node.js (Express) y MongoDB.\n •	Colaboré en el diseño de soluciones orientadas a mejorar procesos internos y la experiencia del usuario.\n •	Proyecto destacado: Sistema de gestión de contenidos y e-commerce que optimizó la automatización y análisis en tiempo real de las ventas.'
   }
 ];
 
 const education = [
   {
-    title: 'Universidad de la Vida',
-    role: 'Maestría en Diseño',
-    period: 'Julio 2011 - Junio 2015',
-    description: 'Especialización en diseño de interfaces y experiencia de usuario con enfoque en soluciones digitales.'
+    title: 'Ingeniería de Software, Instituto Politécnico de la Habana (CUJAE)',
+    role: 'Ingeniería de Software',
+    period: 'Marzo 2021 - Mayo 2025',
+    description: `Graduado en Ingeniería de Software, con una tesis especializada en AutoML para Clustering. Desarrollo de amplios conocimientos en:
+    • Diseño de software \n
+    • Ingeniería de requisitos\n
+    • Estructuras de datos \n
+    • Bases de datos\n
+    • Programación orientada a objetos \n
+    • Machine Learning y Deep Learning \n 
+    • Desarrollo de aplicaciones full stack y de microservicios.`,
+    icon:'study'
   },
-  {
-    title: 'Universidad Estatal de Diseño',
-    role: 'Licenciatura en Diseño',
-    period: 'Julio 2009 - Junio 2011',
-    description: 'Formación en principios fundamentales de diseño, tipografía, color y composición.'
-  },
-  {
-    title: 'Escuela de Golpes Duros',
-    role: 'Licenciatura en Experiencia',
-    period: 'Julio 2005 - Junio 2009',
-    description: 'Aprendizaje práctico a través de proyectos reales y desafíos del mundo profesional.'
-  }
 ];
 
 const skills = [
   {
-    title: 'Identidad de Marca',
-    description: 'Desarrollo de identidades de marca memorables que ayudan a tu negocio a destacar en un mercado competitivo.'
+    title: "Desarrollo Full Stack",
+    description: "Experiencia completa en la construcción de aplicaciones web y móviles, desde la interfaz de usuario hasta la lógica de negocio y la gestión de bases de datos. Capacidad para diseñar y mantener arquitecturas escalables y eficientes."
   },
   {
-    title: 'Ilustración',
-    description: 'Creación de ilustraciones personalizadas que comunican tu mensaje de manera efectiva y atractiva.'
+    title: "Liderazgo Técnico",
+    description: "Coordinación y guía de equipos de desarrollo, definiendo estándares técnicos, revisando código y asegurando la calidad del producto. Experiencia como tech lead y project manager en proyectos multidisciplinarios."
   },
   {
-    title: 'Diseño Web',
-    description: 'Diseño de sitios web modernos, responsivos y centrados en la experiencia del usuario.'
+    title: "Inteligencia Artificial",
+    description: "Diseño e implementación de soluciones basadas en machine learning y deep learning. Integración de modelos de IA en productos reales, automatizando procesos y aportando valor mediante la analítica avanzada."
   },
   {
-    title: 'Estrategia de Producto',
-    description: 'Desarrollo de estrategias efectivas para productos digitales que generan resultados tangibles.'
+    title: "Modelos de Lenguaje (LLM)",
+    description: "Especialización en el uso e integración de grandes modelos de lenguaje (LLM) para tareas de procesamiento de lenguaje natural, generación de texto y automatización inteligente de flujos de trabajo."
   },
   {
-    title: 'Diseño UI/UX',
-    description: 'Creación de interfaces intuitivas y experiencias de usuario que convierten visitantes en clientes.'
+    title: "Gestión de Proyectos",
+    description: "Planificación, coordinación y ejecución de proyectos tecnológicos, asegurando el cumplimiento de objetivos, plazos y calidad. Gestión eficiente de equipos y recursos."
   },
   {
-    title: 'Diseño Móvil',
-    description: 'Diseño de experiencias móviles optimizadas para diferentes dispositivos y plataformas.'
-  }
+    title: "Innovación y Emprendimiento",
+    description: "Actitud proactiva hacia la creación y lanzamiento de nuevos productos digitales. Desarrollo de ideas innovadoras en el sector tecnológico, combinando creatividad, visión de negocio y capacidades técnicas."
+  },
 ];
 
 const projects = [
   {
-    title: 'Ciudad Edificio',
-    category: 'Branding',
-    description: 'Desarrollo de identidad visual para un proyecto inmobiliario innovador.',
-    image: 'https://picsum.photos/id/1067/600/400'
+    title: 'VivoBot',
+    category: 'ChatBot',
+    description: 'Agente Integeligente para guiar a los prestadores de la empresa VivoFacil en la ejecución de sus tareas diarias',
+    image: './vivofacil.png',
+    tags:['Nestjs', 'Redis', 'Openai']
   },
   {
-    title: 'Artesanía en Madera',
-    category: 'Diseño Web',
-    description: 'Sitio web para un estudio de carpintería artesanal con enfoque en sostenibilidad.',
-    image: 'https://picsum.photos/id/119/600/400'
+    title: 'Holnix Shopify Plugin',
+    category: 'Plugin',
+    description: 'Aplicación Embebida en el ambiente de Shopify que utiliza la API de Holnix',
+    image: './holnix.png',
+    tags:['Remix','React','Tailwind','Shopify','GraphQl']
   },
   {
-    title: 'El Escarabajo',
-    category: 'Desarrollo Web',
-    description: 'Aplicación web para una empresa de transporte ecológico con sistema de reservas.',
-    image: 'https://picsum.photos/id/133/600/400'
+    title: 'Tesis de Pregrado',
+    category: 'Machine Learning',
+    description: 'Desarrollo de un componente AutoML que automatiza tareas de agrupamiento en flujos KNIME.',
+    image: './Tesis 1.png',
+    tags: ['Knime','Python','Pandas','Scikit-Learn','Pytorch']
   },
   {
-    title: 'Shutterbug',
-    category: 'Branding',
-    description: 'Identidad visual para un colectivo de fotógrafos documentales.',
-    image: 'https://picsum.photos/id/160/600/400'
+    title: 'DocAI',
+    category: 'Aplicación Web',
+    description: 'Aplicación Web para conformar documentos empresariales que reduce el tiempo y el esfuerzo dedicados a su elaboración y procesamiento.',
+    image: './DocAi.png',
+    tags: ['NextJS','React','Tailwind','Shadcn']
   },
   {
-    title: 'Lámpara',
-    category: 'Diseño Web',
-    description: 'Tienda online para una marca de iluminación de diseño contemporáneo.',
-    image: 'https://picsum.photos/id/163/600/400'
+    title: 'gaming-coach.ai',
+    category: 'Proyecto Personal',
+    description: 'CoachAI es una plataforma de coaching personalizado con IA para gamers, ofreciendo análisis y feedback en tiempo real.',
+    image: './gaming-coach.png',
+    tags: ['Astro','React','Tailwind','Python','Openai','Keras','TensorFlow']
   },
   {
-    title: 'Fuji',
-    category: 'Diseño Web',
-    description: 'Portal web para una agencia de viajes especializada en destinos asiáticos.',
-    image: 'https://picsum.photos/id/240/600/400'
+    title: 'CompraChat',
+    category: 'Proyecto Personal',
+    description: 'CompraChat propone un asistente de compras online con IA que ayuda a usuarios españoles a comparar productos.',
+    image: './CompraChat.png',
+    tags: ['NextJS','React','Tailwind','Shadcn','Python','Openai','Celery','MongoDB','Redis','Selenium','Playwright']
   }
 ];
 
 const socialLinks = [
-  { name: 'Facebook', url: '#' },
-  { name: 'Twitter', url: '#' },
-  { name: 'Instagram', url: '#' }
+  { name: 'Linkedin', url: 'https://www.linkedin.com/in/mario-perera-b30921237/' },
+  { name: 'Github', url: 'https://github.com/elmayii' },
+  { name: 'Instagram', url: 'https://www.instagram.com/sr_perera/' }
 ];
 ---
 
-<Layout title="Epitome - Portfolio" description="Emprendedor Digital e Ingeniero de Software">
+<Layout title="sr-perera" description="Emprendedor Digital e Ingeniero de Software">
   <Navbar items={navItems} client:load />
   
   <main>
@@ -144,29 +156,38 @@ const socialLinks = [
       scrollText="Desplázate para más" 
     />
     
-    <About/>
-    
-    <Experience workItems={workExperience} educationItems={education} />
-    
+    <LazyShow client:load>
+      <About/>
+    </LazyShow>
+
+    <LazyShow client:load>
+      <Experience workItems={workExperience} educationItems={education} />
+    </LazyShow>
 	<br/>
 
-    <Skills 
-      title="Capacidades" 
-      subtitle="Mi pasión y objetivo es ayudarte a hacer que tu negocio destaque." 
-      skills={skills} 
-    />
     
-    <!-- <Projects 
+      <Skills 
+        title="Capacidades" 
+        subtitle="Mi pasión y objetivo es ayudarte a hacer que tu negocio destaque." 
+        skills={skills}
+        client:load
+      />
+
+    <Projects 
       title="Trabajos Seleccionados" 
       subtitle="Aquí hay algunos de mis trabajos seleccionados que he realizado últimamente. Siéntete libre de revisarlos." 
       projects={projects} 
-    /> -->
-    
-    <Contact 
-      email="hola@epitome.com" 
-      phone="+123 456 7890" 
-      socialLinks={socialLinks} 
+      client:load
     />
+
+    
+    <LazyShow client:load>
+      <Contact 
+        email="mariomanuel.pereravaldes@gmail.com" 
+        phone="+5355372562" 
+        socialLinks={socialLinks} 
+      />
+    </LazyShow>
   </main>
   
   <Footer />
