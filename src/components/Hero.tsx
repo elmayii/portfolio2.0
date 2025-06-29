@@ -19,7 +19,7 @@ const Hero: React.FC<HeroProps> = ({
       <div className="absolute inset-0 z-0 overflow-hidden">
         <img 
           src="/HeroImage.jpg" 
-          alt="Fondo del héroe" 
+          alt="Imagen de Mario Perera" 
           className="w-full h-[120%] object-cover opacity-80 object-top -translate-y-[10%]"
         />
         <div className=""></div>
@@ -30,10 +30,10 @@ const Hero: React.FC<HeroProps> = ({
           <span className="text-xl md:text-2xl font-medium text-secondary">{subtitle}</span>
         </div>
         
-        <h1 className="text-5xl md:text-7xl font-bold mb-8 max-w-4xl mx-auto">
-          <span className="block mb-2">{name}</span>
-          <span className="block">{title}</span>
-        </h1>
+        <div className="text-5xl md:text-7xl font-bold mb-8 max-w-4xl mx-auto">
+          <h1 className="block mb-2">{name}</h1>
+          <p className="block">{title}</p>
+        </div>
         
         <div className="absolute bottom-10 left-0 right-0 flex flex-col items-center animate-bounce">
           <span className="mb-2 text-sm">{scrollText}</span>

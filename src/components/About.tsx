@@ -7,7 +7,7 @@ interface AboutProps {
 
 const About: React.FC<AboutProps> = ({ 
   hireLink = "#contact", 
-  cvLink = "#" 
+  cvLink = "/Mario_Perera_Senior_Software_Engineer.pdf" 
 }) => {
   return (
     <section id="about" className="py-20 bg-white">
@@ -56,6 +56,7 @@ const About: React.FC<AboutProps> = ({
                 <a 
                 href={cvLink} 
                 className="px-8 py-3 border border-gray-400 text-dark font-medium hover:bg-gray-100 transition-colors inline-block uppercase tracking-wider text-sm text-center w-1/2"
+                download="Mario_Perera_CV.pdf"
                 >
                 Descargar CV
                 </a>

@@ -4,9 +4,16 @@ import '../styles/global.css';
 interface Props {
   title?: string;
   description?: string;
+  image?: string; // Para la imagen de Open Graph
 }
 
-const { title = 'sr-perera', description = 'Emprendedor Digital e Ingeniero de Software' } = Astro.props;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+const {
+  title = 'Mario Perera (srperera) | Ingeniero de Software y Freelance',
+  description = 'Portfolio de Mario Perera (srperera), Ingeniero de Software y desarrollador freelance. Experto en NestJS, Next.js e IA. Contacta a Mario Perera para tu próximo proyecto.',
+  image = './HeroImage.jpg' // Crea una imagen de 1200x630px y ponla en /public
+} = Astro.props;
 ---
 
 <!doctype html>
@@ -16,8 +23,44 @@ const { title = 'sr-perera', description = 'Emprendedor Digital e Ingeniero de S
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description} />
+
+    <!-- SEO -->
     <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="keywords" content="mario perera, srperera, sr_perera, mario perera ingeniero, mario perera ingeniero de software, mario freelance, mario perera freelance, desarrollador full stack, ingeniero de software, nestjs, nextjs, typescript, ia, liderazgo tecnico, portfolio" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:image" content={new URL(image, Astro.url)} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="es_ES" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(image, Astro.url)} />
+
+    <!-- Datos Estructurados -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+        "@context": "http://schema.org",
+        "@type": "Person",
+        "name": "Mario Perera",
+        "alternateName": ["srperera","sr-perera", "sr_perera"],
+        "url": Astro.site,
+        "sameAs": [
+          "https://www.linkedin.com/in/mario-perera-b30921237/", // URL de tu LinkedIn
+          "https://github.com/elmayii", // URL de tu GitHub
+          'https://www.instagram.com/sr_perera/'
+        ],
+        "jobTitle": "Ingeniero de Software",
+        "knowsAbout": ["NestJS", "Next.js", "Inteligencia Artificial", "Freelance", "Liderazgo Técnico"],
+        "alumniOf": "Instituto Politécnico de la Habana (CUJAE)"
+      })} />
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@500;600;700&display=swap" rel="stylesheet">
   </head>
   <body class="min-h-screen bg-light text-dark">
