@@ -29,16 +29,16 @@ const Projects: React.FC<ProjectsProps> = ({ title, subtitle, projects }) => {
             <>
             {index % 2 === 0?
               <>
-                <LazyShow key={index}>
-                  <ProjectItem key={index} index={index} project={project}/>
+                <LazyShow key={`0${index}`}>
+                  <ProjectItem key={`00${index}`} project={project}/>
                 </LazyShow>
                 <div key={index} className={`relative overflow-hidden`}></div>
               </>
               :
               <>
                 <div key={index} className={`relative overflow-hidden`}></div>
-                <LazyShow key={index}>
-                  <ProjectItem key={index} index={index} project={project}/>
+                <LazyShow key={`0${index}`}>
+                  <ProjectItem key={`00${index}`} project={project}/>
                 </LazyShow>
               </>
             }

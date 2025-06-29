@@ -17,7 +17,6 @@ import { GrGraphQl } from 'react-icons/gr';
 
 interface ProjectProps {
     project: Project;
-    index: number
 }
 
 // Mapeo de tecnologías a sus iconos y colores
@@ -57,16 +56,15 @@ const techIcons: Record<string, { icon: JSX.Element, color: string }> = {
   'Default': { icon: <RiCodeSSlashLine size={16} />, color: '#718096' }
 };
 
-export const ProjectItem: FC<ProjectProps> = ({project,index}) => {
+export const ProjectItem: FC<ProjectProps> = ({project}) => {
   return (
     <div 
-              key={index}
               className={`relative overflow-hidden rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl`}
             >
               <div className="relative h-64 sm:h-72 overflow-hidden">
                 <img 
                   src={project.image} 
-                  alt={project.title} 
+                  alt={`Imagen del proyecto ${project.title}`} 
                   className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
