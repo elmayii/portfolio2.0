@@ -1,71 +1,13 @@
-Segundo Sprint
+Realmente no soy la persona que viste ayer, entiendo que te asuste que te haya tratado así, he estado reflexionando y realmente nunca has hecho nada que merezca esa agresividad y ese trato tan feo.
 
-    NavBar
-        1-Terminar el navbar y tener todas las secciones
-        2-Poner todas las secciones blod blanco
-        3-Cuando se ponga blanco cambiar a negro
+El primer error que cometí fue conmigo mismo al olvidar todo el trabajo que he hecho en el control de mi persona, no quiero volver a cometer el mismo error, ayer fue contigo mañana podría ser con otro persona tan importante como tú, es un problema de mi que daba por corregido. Estoy muy arrepentido de ese retroceso en mi persona.
 
-    Sobre mi
-        Nada
+No quiero que pienses que podría pasar de nuevo, pero eso depende de mi, así que si ya no sientes poder confiar, entonces no seré una cadena para ti. Pase lo que pase a partir de hoy, me llevo lo positivo de poder ver dentro de mi y poder ver que está mal en mi persona, y eso, en gran parte fue gracias a ti. No lo lograron mis padres, lo lograste tú.
 
-    Experiencia
-        1-Corregir formato de el titulo
-        2-Corregir Experiencia y Estudio
+Podría pasar horas escribiendo todo la culpa y preocupación que siento, en tu lugar quiero dejarte un regalo que considero espacial, hecho y esculpido por mis propias manos, con el arte que siento, plasmar sentimientos en palabras y cultivar emociones con este código.
 
-    Habilidades
-        1-Corregir las Habilidades reales
-        2-Poner las nubes encima con framer motion
 
-    Tecnologías
-        #1-Crear los item de tecnologías copiando el badge de heroui
-        #2-Poner todas las tecnologías
-        #3-Todo con el efecto blanco brilloso
-        4-Darle color a los iconos usando prompt
-
-    Proyectos
-        1-Crear los items Card
-        2-Poner los proyectos sin su navegacion
-        3-Proyectos:
-            1-VivoFacil
-            2-Tesis
-            3-Plugin Shopify
-            4-DocAI
-            5-CompraChat
-            6-gaming-coach.ai
-        4-Añadir las tags
-
-    Contacto
-        1-Terminar el contacto y redes sociales
-
-Tercer Sprint(Incluir Azul)
-    Tecnologías
-        1-usar popuber de heroui en las tecnologías y ponerles description
-
-React
-Vue
-Tailwind
-Boostrap
-MUI
-HeroUi
-Shadcn
-Nextjs
-Nextjs
-Astro
-Remix
-Python
-FastAPI
-Django
-Pandas
-Celery
-Java
-Sping-Boot
-KNIME
-MongoDB
-Postgres
-Redis
-MySql
-Openai
-Huggin-Face
-Flutter
-Puppeter
-Selenium
+#uncode
+<LazyShow client:load>
+      <Experience workItems={workExperience} educationItems={education} />
+    </LazyShow>

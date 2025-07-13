@@ -27,7 +27,7 @@ const Navbar: React.FC<NavbarProps> = ({ items }) => {
     }`}>
       <div className="container mx-auto px-4 flex justify-between items-center">
         <a href="#" className="text-xl font-bold text-dark">
-          sr_perera
+          {`I'm realy sorry`}
         </a>
         
         {/* Menú móvil */}

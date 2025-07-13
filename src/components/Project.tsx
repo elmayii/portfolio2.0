@@ -68,7 +68,7 @@ export const ProjectItem: FC<ProjectProps> = ({project}) => {
                   className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
-                  <span className="text-primary font-medium text-sm mb-1 text-white">{project.category}</span>
+                  {/* <span className="text-primary font-medium text-sm mb-1 text-white">{project.category}</span> */}
                   <h3 className="text-white text-2xl font-bold">{project.title}</h3>
                 </div>
               </div>
@@ -77,7 +77,7 @@ export const ProjectItem: FC<ProjectProps> = ({project}) => {
                 <p className="text-gray-700 mb-4">{project.description}</p>
                 
                 {/* Chips de tecnologías */}
-                {project.tags && project.tags.length > 0 && (
+                {/* {project.tags && project.tags.length > 0 && (
                   <div className="flex flex-wrap gap-2 mb-2">
                     {project.tags.map((tag, idx) => {
                       const tech = techIcons[tag] || techIcons['Default'];
@@ -97,7 +97,7 @@ export const ProjectItem: FC<ProjectProps> = ({project}) => {
                       );
                     })}
                   </div>
-                )}
+                )} */}
                 
                 {project.link && (
                   <a 

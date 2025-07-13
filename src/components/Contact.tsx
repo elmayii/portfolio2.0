@@ -60,12 +60,12 @@ const Contact: React.FC<ContactProps> = ({ email, phone, socialLinks = [] }) => 
   return (
     <section id="contact" className="py-20 bg-white">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-bold mb-4 text-center">Contáctame</h2>
+        <h2 className="text-3xl font-bold mb-4 text-center">Lo último por decir</h2>
         <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-          Estoy disponible para nuevos proyectos y colaboraciones. Escríbeme y conversemos sobre cómo puedo ayudarte.
+          Solo deseo que llegues hasta aquí y tomate tu tiempo, pero con cada minuto que pasa, más pesa el arrepentimiento y el vacio que siento en mis brazos que han perdido el privilegio de sentirte. Te amo y lo siento 🤍.
         </p>
         
-        <div className="max-w-md mx-auto">
+        {/* <div className="max-w-md mx-auto">
           <div className="mb-8 text-center">
             <div className="flex items-center justify-center mb-2">
               <FaEnvelope className="text-blue-600 mr-2" size={20} />
@@ -120,7 +120,7 @@ const Contact: React.FC<ContactProps> = ({ email, phone, socialLinks = [] }) => 
               </div>
             </div>
           )}
-        </div>
+        </div> */}
       </div>
     </section>
   );

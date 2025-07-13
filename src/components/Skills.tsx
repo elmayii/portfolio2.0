@@ -64,7 +64,7 @@ const Skills: React.FC<SkillsProps> = ({ title, subtitle, skills }) => {
           </div>
         </LazyShow>
       </section>
-      <Stack title={'Técnologias'} subtitle={'Tecnologías que he utilizado en mis proyectos'}/>
+      {/* <Stack title={'Valores'} subtitle={''}/> */}
     </div>
     </div>
   );

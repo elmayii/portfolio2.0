@@ -14,6 +14,7 @@ import {
 import { RiCodeSSlashLine } from 'react-icons/ri';
 import LazyShow from './LazyShow';
 import { GrGraphQl } from 'react-icons/gr';
+import { BiHeart } from 'react-icons/bi';
 
 interface StackProps {
   title: string;
@@ -22,10 +23,10 @@ interface StackProps {
 
 // Definición de tecnologías con sus iconos y colores
 const technologies = [
-  { name: 'React', icon: <FaReact size={32} />, color: '#61DAFB' },
-  { name: 'Vue', icon: <FaVuejs size={32} />, color: '#4FC08D' },
-  { name: 'Tailwind', icon: <SiTailwindcss size={32} />, color: '#38B2AC' },
-  { name: 'Bootstrap', icon: <FaBootstrap size={32} />, color: '#7952B3' },
+  { name: 'Bondad', icon: <BiHeart size={32} />, color: '#61DAFB' },
+  { name: 'Generosidad', icon: <FaVuejs size={32} />, color: '#4FC08D' },
+  { name: 'Responsabilidad', icon: <SiTailwindcss size={32} />, color: '#38B2AC' },
+  { name: 'Educación', icon: <FaBootstrap size={32} />, color: '#7952B3' },
   { name: 'MUI', icon: <SiMui size={32} />, color: '#007FFF' },
   { name: 'HeroUI', icon: <RiCodeSSlashLine size={32} />, color: '#FF4785' },
   { name: 'Shadcn', icon: <SiShadcnui size={32} />, color: '#000000' },

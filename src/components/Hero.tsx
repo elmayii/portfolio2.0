@@ -18,7 +18,7 @@ const Hero: React.FC<HeroProps> = ({
       {/* Imagen de fondo con overlay */}
       <div className="absolute inset-0 z-0 overflow-hidden">
         <img 
-          src="/HeroImage.jpg" 
+          src="/hero.jpg" 
           alt="Imagen de Mario Perera" 
           className="w-full h-[120%] object-cover opacity-80 object-top -translate-y-[10%]"
         />
@@ -26,17 +26,17 @@ const Hero: React.FC<HeroProps> = ({
       </div>
       
       <div className="container mx-auto px-4 text-center z-10">
-        <div className="mb-4">
+        {/* <div className="mb-4">
           <span className="text-xl md:text-2xl font-medium text-secondary">{subtitle}</span>
-        </div>
+        </div> */}
         
-        <div className="text-5xl md:text-7xl font-bold mb-8 max-w-4xl mx-auto">
+        {/* <div className="text-5xl md:text-7xl font-bold mb-8 max-w-4xl mx-auto">
           <h1 className="block mb-2">{name}</h1>
           <p className="block">{title}</p>
-        </div>
+        </div> */}
         
         <div className="absolute bottom-10 left-0 right-0 flex flex-col items-center animate-bounce">
-          <span className="mb-2 text-sm">{scrollText}</span>
+          <span className="mb-2 text-sm text-blue-400">{scrollText}</span>
           <svg 
             xmlns="http://www.w3.org/2000/svg" 
             fill="none" 
