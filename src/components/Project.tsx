@@ -69,7 +69,13 @@ export const ProjectItem: FC<ProjectProps> = ({project}) => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent flex flex-col justify-end p-6">
                   <span className="text-primary font-medium text-sm mb-1 text-white">{project.category}</span>
-                  <h3 className="text-white text-2xl font-bold">{project.title}</h3>
+                  {project?.link?
+                    <a href={project?.link} target="_blank" rel="noopener noreferrer" className='hover:text-white hover:scale-102 transition-all duration-200'>
+                      <h3 className="text-white text-2xl font-bold">{project.title}</h3>
+                    </a>
+                  :
+                    <h3 className="text-white text-2xl font-bold">{project.title}</h3>
+                  }
                 </div>
               </div>
               
@@ -97,17 +103,6 @@ export const ProjectItem: FC<ProjectProps> = ({project}) => {
                       );
                     })}
                   </div>
-                )}
-                
-                {project.link && (
-                  <a 
-                    href={project.link} 
-                    className="inline-block px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/80 transition-colors"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Ver proyecto
-                  </a>
                 )}
               </div>
             </div>
