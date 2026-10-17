@@ -3,6 +3,72 @@
 > Handoff log. One entry per meaningful step, **newest first** (the ordering is declared in the
 > protocol; never mix orderings). Do not exaggerate progress.
 
+## 2026-10-17 17:40 — Sprint 01 closed; Sprint 02 ACTIVE, all batches BLOCKED
+
+Status: PAUSED
+
+Completed:
+- Sprint 01 DONE. Sprint 02 (launch readiness) promoted to ACTIVE with four batches, each
+  BLOCKED on a named human input. Stripe and PostHog stay open questions (ABSENT).
+- Plan exhausted inside DEFINED/PARTIAL: self-chosen order checked — (1) README "Before launch"
+  items all wait on human values or gates; (2) no EN/ES parity yet; (3) gates green, every
+  route has evidence, a11y basics pass; (4) next-phase ideas written as `PROPOSAL` in
+  SPRINTS.md (hero photo weight, phone navigation, avatar reuse, OG image).
+
+Blockers (minimum human decision each):
+- Sprint 02 / Batch 01: real URLs for TikTok, X, Substack, RADAR #1; next episode title; next
+  pack name + line.
+- Sprint 02 / Batch 02: Spanish routing (`/es/` vs browser detection) + who approves the copy.
+- Sprint 02 / Batch 03: approval to delete the legacy React code and its dependencies.
+- Sprint 02 / Batch 04: email provider + hosting + approval for the adapter/server output.
+- Merging `cdev/sprint-01-batch-01` and `cdev/sprint-01-batch-02` (stacked) into
+  `feat/saas-killing-world-alt2` and pushing: human gate.
+
+Next:
+- Any of the decisions above → `/cdev` resumes on the unblocked batch.
+
+## 2026-10-17 17:35 — Sprint 01, Batch 02 — Runtime baseline of every flow
+
+Status: DONE
+
+Completed:
+- D1 fixed: the "Copy prompt" button in `/r/playbook` now has its own class `.copy-btn`; the
+  hero copy `div.copy` keeps its layout (background transparent, H1 and lede visible, no
+  spill into the members band).
+- D2 fixed: `sitemap({ filter })` keeps the `noindex` `/welcome` out of the sitemap.
+- Flows driven on preview (`:4322`) with Playwright:
+  - Subscribe (hero, 375): empty → error shown + input focused; `not-an-email` → error; valid
+    `test@example.com` → `/welcome?source=hero`, `localStorage.optin_email` stored. pass
+  - Header anchors (1280): `/welcome` → Read → `/#read` and Builds → `/#built` land on the
+    section; on home Work with me → `#work`. All six anchors exist. pass
+  - `/r/playbook`: Copy prompt shows "Copied", button keeps its style; both sheet links point to
+    the Google Sheets copy URL. pass
+  - 375px: no horizontal overflow on `/`, `/welcome`, `/r/playbook`. pass
+  - A11y basics: one `h1` per page, 0 images without `alt`, 0 unlabeled controls, 21 focusable
+    elements on home all take focus with a visible outline (checked with script `focus()`,
+    not a manual Tab walk). pass
+
+Files changed:
+- `src/pages/r/playbook.astro`, `astro.config.mjs`, `docs/develop/SPRINTS.md`,
+  `docs/develop/AGENT_PROGRESS.md`
+
+Verification:
+- npm ci: not-run (no dependency change in this batch)
+- npx astro check: pass — 0 errors, 0 warnings, 13 hints (legacy)
+- npm run build: pass — sitemap lists `/` and `/r/playbook/` only
+- runtime evidence: pass — 0 console errors/warnings; screenshots
+  `logs/evidence/01-02/playbook-1280-after.png`, `playbook-375-after.png`,
+  `subscribe-invalid-375.png` (before: `logs/evidence/01-01/playbook-*.png`)
+
+Observations needing a human decision (not fixed):
+- Phone header hides Read / Builds / Vault / Work with me; there is no phone menu.
+- Placeholder `#` links still live: TikTok, X, Substack (footer), RADAR #1 and SaaS Kill #01
+  (latest), both plans and "Subscribe there" on `/welcome`.
+- The email error line sits ~2px from the reader count under the hero form (tight, readable).
+
+Next:
+- Sprint 01 closes (see entry above).
+
 ## 2026-10-17 17:25 — Sprint 01, Batch 01 — Astro 7 toolchain green + type gate
 
 Status: DONE

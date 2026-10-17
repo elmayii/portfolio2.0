@@ -5,7 +5,7 @@
 
 ## Sprint 01 — Green gates and runtime baseline
 
-Status: ACTIVE
+Status: DONE
 
 Goal: the redesign line builds on Astro 7 with a real type gate, and every route has recorded
 runtime evidence, so later batches start from a verified base.
@@ -47,7 +47,7 @@ Acceptance:
 
 ### Batch 02 — Runtime baseline of every flow
 
-Status: READY
+Status: DONE
 
 Known defects carried from Batch 01 (fix here):
 - D1 `/r/playbook` hero broken at every width: `.copy` names both the hero copy `<div>`
@@ -73,11 +73,71 @@ Acceptance:
 - Every fix carries its own before/after evidence.
 - Defects that need a human decision are listed as open questions, not fixed.
 
-## Sprint 02+ — Launch readiness: Spanish version and launch integrations
+## Sprint 02 — Launch readiness
 
-Status: PENDING
+Status: ACTIVE
 
-Candidate scope (each needs its PRODUCT.md open questions answered first): fill launch
-placeholders with human-provided values; Spanish version (routing decision + approved copy);
-`/api/subscribe` (provider + adapter gate); Stripe checkout links; PostHog events; legacy React
-cleanup.
+Goal: close the README "Before launch" list. Every batch below waits on a human input; each
+names the minimum decision that unblocks it. Stripe checkout and PostHog are ABSENT in
+PRODUCT.md and stay open questions until their inputs exist.
+
+### Batch 01 — Fill launch placeholders
+
+Status: BLOCKED
+
+Unblocks with: real URLs for TikTok, X and Substack; the "RADAR #1" target; the next episode
+title; the next pack name + one line.
+
+Tasks:
+- Replace the `[brackets]` and `href: '#'` values in `src/data/site.ts` with the provided ones.
+- Socials with real URLs flow into JSON-LD `sameAs` automatically (only `http` URLs).
+
+Acceptance:
+- No `[` placeholder and no `'#'` link left in `site.ts` for the provided items.
+- Footer, latest cards and JSON-LD checked in the built HTML; Playwright on `/` at 1280/375.
+
+### Batch 02 — Spanish version
+
+Status: BLOCKED
+
+Unblocks with: routing choice (`/es/` with Astro i18n vs. browser-language detection) and who
+writes or approves the Spanish copy.
+
+Tasks:
+- Implement the chosen routing; Spanish copy beside `site.ts` with the same shape; `lang`,
+  `og:locale`, `hreflang` per page.
+
+Acceptance:
+- Every route renders in both languages with identical structure; language switch verified with
+  Playwright at 1280/375; sitemap lists both.
+
+### Batch 03 — Legacy React cleanup
+
+Status: BLOCKED
+
+Unblocks with: approval to delete `src/components/*.tsx`, `Canvas/`, `src/hooks/`,
+`Welcome.astro`, `src/assets/`, `tailwind.config.js`, the `@astrojs/react` integration and the
+`react`, `react-dom`, `@types/react*`, `framer-motion`, `react-icons` dependencies — and
+whether the old CV PDF stays.
+
+Acceptance:
+- `astro check` 0 errors and 0 hints from legacy; build passes; the three routes look identical
+  to `logs/evidence/01-02/` captures.
+
+### Batch 04 — `/api/subscribe`
+
+Status: BLOCKED
+
+Unblocks with: the email provider and its API, hosting confirmed (README says Vercel), approval
+to add the adapter and switch the route to server output (safety gate).
+
+## PROPOSAL — Next phase drafts (not active)
+
+- Hero photo weight: `HeroImage.jpg` is 1706×2560 / 390KB, shown at ≤420×525 CSS px; a ~840px
+  wide derivative (or `astro:assets` `<Picture>`) would cut most of the desktop LCP bytes.
+- Phone navigation: at phone widths the header shows only the brand and Subscribe; Read /
+  Builds / Vault / Work with me are unreachable except by scrolling. Decide whether that is
+  intended.
+- Reuse the face avatar in "Work with me" and as a signature on `/welcome`, `/r/playbook` and
+  the footer (raised at the hero change, not approved).
+- OG image: still `mario-portrait-bw.jpg`; a 1200×630 asset is needed to change it.

@@ -210,7 +210,7 @@ const tools = [
             <div class="prompt">
               <pre id={`prompt-${p.id}`}>{p.text}</pre>
               <div class="prompt-bar">
-                <button type="button" class="copy" data-copy={`prompt-${p.id}`}>Copy prompt</button>
+                <button type="button" class="copy-btn" data-copy={`prompt-${p.id}`}>Copy prompt</button>
                 <span class="copied mono" role="status" hidden>Copied</span>
               </div>
             </div>
@@ -504,7 +504,7 @@ const tools = [
     background: #F7F7F8;
   }
 
-  .copy {
+  .copy-btn {
     height: 44px;
     padding: 0 16px;
     border: 0;
