@@ -3,6 +3,18 @@
 > Handoff log. One entry per meaningful step, **newest first** (the ordering is declared in the
 > protocol; never mix orderings). Do not exaggerate progress.
 
+## 2026-10-17 17:50 — Sprint 01 merged
+
+Status: DONE
+
+Completed:
+- Human approved: `cdev/sprint-01-batch-01` + `cdev/sprint-01-batch-02` fast-forwarded into
+  `feat/saas-killing-world-alt2` (`130c03f..f9cb7c2`) and pushed to origin.
+
+Next:
+- Sprint 02 batches stay BLOCKED on the inputs listed in the entry below; new batch branches
+  are cut from `feat/saas-killing-world-alt2`.
+
 ## 2026-10-17 17:40 — Sprint 01 closed; Sprint 02 ACTIVE, all batches BLOCKED
 
 Status: PAUSED
