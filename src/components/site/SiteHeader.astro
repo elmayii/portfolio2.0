@@ -10,7 +10,7 @@ const base = home ? '' : '/';
 <header class:list={['site-header', { solid: !home }]}>
   <div class="wrap bar">
     <a href="/" class="brand" aria-label="Mario Perera, home">
-      <img src="/round-logo-srPerera.svg" alt="" width="40" height="40" />
+      <img src="/brand-mark.svg" alt="" width="73" height="22" />
       <span class="name">Mario Perera</span>
       <span class="handle">sr_perera</span>
     </a>
@@ -54,9 +54,9 @@ const base = home ? '' : '/';
   }
 
   .brand img {
-    border-radius: 50%;
-    border: 1px solid var(--rule);
-    background: var(--paper);
+    display: block;
+    height: 22px;
+    width: auto;
   }
 
   .name {
