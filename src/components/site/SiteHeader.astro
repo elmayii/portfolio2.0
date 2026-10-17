@@ -107,4 +107,33 @@ const base = home ? '' : '/';
       display: none;
     }
   }
+
+  /* Keep the wordmark, name and Subscribe on one line on phones */
+  @media (max-width: 440px) {
+    .brand {
+      gap: 10px;
+    }
+
+    .brand img {
+      height: 18px;
+    }
+
+    .name {
+      font-size: 17px;
+    }
+  }
+
+  @media (max-width: 380px) {
+    .brand {
+      gap: 8px;
+    }
+
+    .brand img {
+      height: 16px;
+    }
+
+    .name {
+      font-size: 16px;
+    }
+  }
 </style>
