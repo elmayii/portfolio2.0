@@ -1,0 +1,145 @@
+---
+import { packs, pricing } from '../../data/site';
+---
+
+<section id="vault" class="night">
+  <div class="wrap inner">
+    <div class="copy">
+      <p class="eyebrow">The Vault · for members</p>
+      <h2>Skip the copy-paste. Your AI does the setup.</h2>
+      <p class="lede">
+        Every guide comes with its full build files. Connect the vault to Claude or ChatGPT, tell it what your business
+        does, and it installs the build with you.
+      </p>
+      <ul>
+        {
+          packs.map((p) => (
+            <li>
+              <span class="mono key">{p.key}</span>
+              <span>{p.text}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="card">
+      <p class="eyebrow">Membership</p>
+      <div class="price">
+        <span class="amount">${pricing.intro}</span>
+        <span>/month for your first 3 months</span>
+      </div>
+      <p class="terms">Then ${pricing.monthly}/month, or ${pricing.yearly}/year. Cancel anytime from your account.</p>
+      <a class="btn" href="/welcome">Join the vault</a>
+      <p class="small">Already paying on Substack? Sign in with the same email.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .night {
+    background: var(--night);
+    color: #F5F5F5;
+  }
+
+  .inner {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+    gap: 48px;
+    align-items: start;
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+
+  .copy {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    min-width: 0;
+  }
+
+  .night .eyebrow {
+    color: var(--night-muted);
+  }
+
+  h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(30px, 3.4vw, 44px);
+    line-height: 1.02;
+    text-transform: uppercase;
+  }
+
+  .lede {
+    margin: 0;
+    font-size: 19px;
+    line-height: 1.55;
+    max-width: 46ch;
+    color: #D4D6DA;
+  }
+
+  ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--night-rule);
+  }
+
+  li {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr);
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--night-rule);
+  }
+
+  .key {
+    font-size: 13px;
+    color: var(--night-muted);
+  }
+
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 32px;
+    border-radius: 8px;
+    background: var(--bg);
+    color: var(--ink);
+  }
+
+  .card .eyebrow {
+    color: var(--muted);
+  }
+
+  .price {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .amount {
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: 60px;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .terms {
+    margin: 0;
+    color: var(--body);
+  }
+
+  .card .btn {
+    height: 56px;
+  }
+
+  .small {
+    margin: 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+</style>

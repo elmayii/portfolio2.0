@@ -1,7 +1,137 @@
 @import "tailwindcss";
 
+/* SaaS-Killing World · light, Mario's brand: black, blue #0057FF, pink #FF3366 */
+:root {
+  --bg: #F5F5F5;
+  --paper: #FFFFFF;
+  --ink: #121212;
+  --body: #2B2E33;
+  --muted: #5C5F66;
+  --rule: #DADCE0;
+  --blue: #0057FF;
+  --blue-tint: #E8EFFF;
+  --pink: #FF3366;
+  --night: #121212;
+  --night-rule: #34373D;
+  --night-muted: #A3A7AF;
+
+  --font-display: 'Montserrat', 'Helvetica Neue', Arial, sans-serif;
+  --font-body: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  --wrap: 1200px;
+  --gutter: max(24px, env(safe-area-inset-left, 0px));
+  color-scheme: light;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  a:hover {
+    color: var(--blue);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 2px;
+  }
+
+  h1, h2, h3 {
+    text-wrap: balance;
+  }
+}
+
+.wrap {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding-left: var(--gutter);
+  padding-right: max(24px, env(safe-area-inset-right, 0px));
+}
+
+.eyebrow {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.section-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 900;
+  font-size: clamp(26px, 3vw, 34px);
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.strike {
+  text-decoration: line-through;
+  text-decoration-color: var(--pink);
+  text-decoration-thickness: 0.09em;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 52px;
+  padding: 0 24px;
+  border: 0;
+  border-radius: 12px;
+  background: var(--blue);
+  color: #FFFFFF;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 16px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  color: #FFFFFF;
+  filter: brightness(1.08);
+}
+
+.link-arrow {
+  font-weight: 700;
+  color: var(--blue);
+  text-decoration: none;
+  padding: 8px 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
   }
 }

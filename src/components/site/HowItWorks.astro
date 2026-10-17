@@ -1,0 +1,70 @@
+---
+import { steps } from '../../data/site';
+---
+
+<section id="guides" class="band">
+  <div class="wrap inner">
+    <h2 class="section-title">How the free guides work</h2>
+    <ol>
+      {
+        steps.map((step, i) => (
+          <li class:list={{ last: i === steps.length - 1 }}>
+            <span class="mono step">STEP {i + 1}</span>
+            <strong>{step.title}</strong>
+            <span>{step.text}</span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .band {
+    background: var(--paper);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .inner {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+
+  ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 32px;
+  }
+
+  li {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    border-top: 3px solid var(--ink);
+    padding-top: 16px;
+    color: var(--body);
+  }
+
+  li.last {
+    border-top-color: var(--blue);
+  }
+
+  .step {
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  strong {
+    font-family: var(--font-display);
+    font-size: 21px;
+    font-weight: 800;
+    color: var(--ink);
+  }
+</style>

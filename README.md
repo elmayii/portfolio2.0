@@ -1,48 +1,39 @@
-# Astro Starter Kit: Basics
+# srperera.com · SaaS-Killing World
+
+Personal site of Mario Perera (sr_perera): the free newsletter, the guides and the two ways companies work with him.
+
+## Run it locally
 
 ```sh
-npm create astro@latest -- --template basics
+npm install
+npm run dev        # http://localhost:4321
+npm run build      # static output in dist/
+npm run preview    # serve dist/ locally
 ```
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/withastro/astro/tree/latest/examples/basics)
-[![Open with CodeSandbox](https://assets.codesandbox.io/github/button-edit-lime.svg)](https://codesandbox.io/p/sandbox/github/withastro/astro/tree/latest/examples/basics)
-[![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://codespaces.new/withastro/astro?devcontainer_path=.devcontainer/basics/devcontainer.json)
+## Pages
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+| Route | What it is |
+| --- | --- |
+| `/` | Home: hero, how the free guides work, series, latest, builds, vault, work with me |
+| `/welcome` | Shown after the email form: confirmation + member offer |
+| `/r/playbook` | Free guide for the keyword PLAYBOOK (will move to vault.srperera.com) |
 
-![just-the-basics](https://github.com/withastro/astro/assets/2244813/a0a5533c-a856-4198-8470-2d67b1d7c554)
+Copy, links and prices live in `src/data/site.ts`. Components are in `src/components/site/`.
 
-## 🚀 Project Structure
+## Environment
 
-Inside of your Astro project, you'll see the following folders and files:
+| Variable | Use |
+| --- | --- |
+| `PUBLIC_SUBSTACK_URL` | e.g. `https://saaskillingworld.substack.com`. When set, the email form also opens the Substack subscribe page. |
 
-```text
-/
-├── public/
-│   └── favicon.svg
-├── src/
-│   ├── layouts/
-│   │   └── Layout.astro
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+## Before launch
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+- [ ] Replace placeholders in `[brackets]` (reader count, next episode, next pack)
+- [ ] Real links for TikTok, X and Substack in `src/data/site.ts`
+- [ ] `/api/subscribe` route (Vercel adapter) instead of the Substack redirect
+- [ ] Stripe checkout links on `/welcome` and the vault card
+- [ ] PostHog with UTM capture and the event list from the plan
+- [ ] Spanish version by browser language
 
-## 🧞 Commands
-
-All commands are run from the root of the project, from a terminal:
-
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
-
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+The previous portfolio components (React) are still in `src/components/` but no longer used by any page.

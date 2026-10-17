@@ -1,0 +1,107 @@
+---
+import { site } from '../../data/site';
+
+interface Props {
+  id: string;
+  source: string;
+  button?: string;
+}
+
+const { id, source, button = 'Subscribe' } = Astro.props;
+---
+
+<form class="subscribe" data-subscribe data-source={source} data-substack={site.substackUrl} novalidate>
+  <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+    <path d="M3 7l9 6 9-6"></path>
+  </svg>
+  <label for={id} class="sr-only">Your email</label>
+  <input id={id} name="email" type="email" autocomplete="email" placeholder="Enter your email" required />
+  <button type="submit" class="btn">{button}</button>
+  <p class="subscribe-error" role="alert" hidden>Enter a valid email address.</p>
+</form>
+
+<style>
+  .subscribe {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 560px;
+    box-sizing: border-box;
+    padding: 6px 6px 6px 18px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 16px;
+    box-shadow: 0 14px 34px -20px rgba(18, 18, 18, 0.35);
+    color: var(--muted);
+  }
+
+  .subscribe input {
+    flex: 1 1 auto;
+    min-width: 0;
+    height: 52px;
+    border: 0;
+    background: transparent;
+    color: var(--ink);
+    font: inherit;
+    font-size: 17px;
+  }
+
+  .subscribe input:focus-visible {
+    outline: none;
+  }
+
+  .subscribe:focus-within {
+    border-color: var(--blue);
+  }
+
+  .subscribe-error {
+    position: absolute;
+    left: 18px;
+    top: calc(100% + 8px);
+    margin: 0;
+    font-size: 14px;
+    color: #C2185B;
+  }
+
+  @media (max-width: 420px) {
+    .subscribe .btn {
+      padding: 0 16px;
+    }
+  }
+</style>
+
+<script>
+  const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  document.querySelectorAll<HTMLFormElement>('form[data-subscribe]').forEach((form) => {
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const input = form.querySelector<HTMLInputElement>('input[type="email"]');
+      const error = form.querySelector<HTMLElement>('.subscribe-error');
+      const email = input?.value.trim() ?? '';
+
+      if (!EMAIL.test(email)) {
+        if (error) error.hidden = false;
+        input?.focus();
+        return;
+      }
+      if (error) error.hidden = true;
+
+      try {
+        localStorage.setItem('optin_email', email);
+      } catch {
+        // Storage can be blocked; the flow works without it.
+      }
+
+      const substack = form.dataset.substack;
+      if (substack) {
+        // TODO: replace with POST /api/subscribe once the server route exists.
+        window.open(`${substack.replace(/\/$/, '')}/subscribe?email=${encodeURIComponent(email)}`, '_blank', 'noopener');
+      }
+      window.location.href = `/welcome?source=${encodeURIComponent(form.dataset.source ?? 'web')}`;
+    });
+  });
+</script>

@@ -1,0 +1,47 @@
+---
+import { socials } from '../../data/site';
+---
+
+<footer>
+  <div class="wrap bar">
+    <nav aria-label="Social">
+      {socials.map((s) => <a href={s.url} rel={s.url.startsWith('http') ? 'me noopener' : undefined}>{s.name}</a>)}
+    </nav>
+    <span class="mono">© {new Date().getFullYear()} Mario Perera</span>
+  </div>
+</footer>
+
+<style>
+  footer {
+    background: var(--paper);
+    border-top: 1px solid var(--rule);
+  }
+
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 28px;
+    padding-bottom: 28px;
+    font-size: 15px;
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+    font-weight: 500;
+  }
+
+  nav a {
+    text-decoration: none;
+    padding: 8px 0;
+  }
+
+  .mono {
+    font-size: 13px;
+    color: var(--muted);
+  }
+</style>

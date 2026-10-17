@@ -1,0 +1,110 @@
+---
+interface Props {
+  home?: boolean;
+}
+
+const { home = false } = Astro.props;
+const base = home ? '' : '/';
+---
+
+<header class:list={['site-header', { solid: !home }]}>
+  <div class="wrap bar">
+    <a href="/" class="brand" aria-label="Mario Perera, home">
+      <img src="/round-logo-srPerera.svg" alt="" width="40" height="40" />
+      <span class="name">Mario Perera</span>
+      <span class="handle">sr_perera</span>
+    </a>
+    <nav aria-label="Main">
+      <a class="navlink" href={`${base}#read`}>Read</a>
+      <a class="navlink" href={`${base}#built`}>Builds</a>
+      <a class="navlink" href={`${base}#vault`}>Vault</a>
+      <a class="navlink strong" href={`${base}#work`}>Work with me</a>
+      <a class="btn subscribe-btn" href={`${base}#join`}>Subscribe</a>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: relative;
+    z-index: 2;
+  }
+
+  .site-header.solid {
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: var(--ink);
+  }
+
+  .brand img {
+    border-radius: 50%;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+  }
+
+  .name {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 18px;
+  }
+
+  .handle {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--blue);
+  }
+
+  nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 28px;
+  }
+
+  .navlink {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--muted);
+    padding: 12px 0;
+  }
+
+  .navlink.strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .subscribe-btn {
+    height: 44px;
+    padding: 0 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    box-shadow: 0 8px 20px -10px rgba(0, 87, 255, 0.6);
+  }
+
+  @media (max-width: 760px) {
+    .navlink,
+    .handle {
+      display: none;
+    }
+  }
+</style>

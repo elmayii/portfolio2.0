@@ -1,0 +1,157 @@
+---
+const doors = [
+  {
+    kicker: 'YOUR BUSINESS SELLS, BUT IT HIT A CEILING',
+    title: 'Growth Partner with Baskion',
+    text: 'We automate what you already do so you can serve more clients with the same team. We get paid only on results.',
+    cta: 'Apply as a partner',
+    href: 'mailto:mariomanuel.pereravaldes@gmail.com?subject=Growth%20Partner',
+  },
+  {
+    kicker: 'YOUR TEAM PAYS FOR LICENSES IT COULD BUILD',
+    title: 'Team training with the CDEV method',
+    text: 'I teach your team to build with AI: understand the service, give the AI the context, centralize the data. Then you stop buying what you can build.',
+    cta: 'Book a team session',
+    href: 'mailto:mariomanuel.pereravaldes@gmail.com?subject=Team%20training',
+  },
+];
+---
+
+<section id="work" class="wrap work">
+  <div class="titles">
+    <p class="eyebrow">For companies</p>
+    <h2 class="section-title">Two ways to work with me</h2>
+  </div>
+  <div class="grid">
+    {
+      doors.map((d) => (
+        <article>
+          <p class="mono kicker">{d.kicker}</p>
+          <h3>{d.title}</h3>
+          <p class="text">{d.text}</p>
+          <a class="link-arrow" href={d.href}>{d.cta} →</a>
+        </article>
+      ))
+    }
+  </div>
+</section>
+
+<section class="about">
+  <div class="wrap about-inner">
+    <img src="/round-logo-srPerera.svg" alt="SR Perera monogram" width="132" height="132" />
+    <div class="about-copy">
+      <h2>I don't have superpowers. I grew up with AI.</h2>
+      <p>
+        I'm a software engineer, trained at CUJAE in Havana. You know your job and your business better than I do; I
+        know how to build with AI. I build in public: CDEV, Compiss and Baskion Innovation with my team.
+      </p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .work {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding-top: 80px;
+    padding-bottom: 80px;
+  }
+
+  .titles {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
+    gap: 16px;
+  }
+
+  article {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 32px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 8px;
+  }
+
+  .kicker {
+    margin: 0;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  h3 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 26px;
+    line-height: 1.15;
+  }
+
+  .text {
+    margin: 0;
+    color: var(--body);
+  }
+
+  article .link-arrow {
+    align-self: flex-start;
+  }
+
+  .about {
+    border-top: 1px solid var(--rule);
+  }
+
+  .about-inner {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 32px;
+    align-items: center;
+    padding-top: 64px;
+    padding-bottom: 64px;
+  }
+
+  .about img {
+    border-radius: 50%;
+    border: 1px solid var(--rule);
+    background: var(--paper);
+  }
+
+  .about-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .about h2 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(24px, 2.6vw, 30px);
+    line-height: 1.1;
+    text-transform: uppercase;
+  }
+
+  .about p {
+    margin: 0;
+    max-width: 60ch;
+    font-size: 18px;
+    color: var(--body);
+  }
+
+  @media (max-width: 600px) {
+    .about-inner {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .about img {
+      width: 96px;
+      height: 96px;
+    }
+  }
+</style>
