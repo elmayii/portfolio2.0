@@ -5,12 +5,13 @@ interface Props {
   id: string;
   source: string;
   button?: string;
+  variant?: 'pill' | 'split';
 }
 
-const { id, source, button = 'Subscribe' } = Astro.props;
+const { id, source, button = 'Subscribe', variant = 'pill' } = Astro.props;
 ---
 
-<form class="subscribe" data-subscribe data-source={source} data-substack={site.substackUrl} novalidate>
+<form class:list={['subscribe', variant]} data-subscribe data-source={source} data-substack={site.substackUrl} novalidate>
   <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
     <rect x="3" y="5" width="18" height="14" rx="2"></rect>
     <path d="M3 7l9 6 9-6"></path>
@@ -55,6 +56,43 @@ const { id, source, button = 'Subscribe' } = Astro.props;
 
   .subscribe:focus-within {
     border-color: var(--blue);
+  }
+
+  /* Split: bordered field and a separate button, no surrounding card */
+  .subscribe.split {
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 520px;
+    padding: 0;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    box-shadow: none;
+  }
+
+  .subscribe.split svg {
+    display: none;
+  }
+
+  .subscribe.split input {
+    flex: 1 1 240px;
+    height: 56px;
+    box-sizing: border-box;
+    padding: 0 16px;
+    border: 1.5px solid var(--ink);
+    border-radius: 6px;
+    background: var(--paper);
+  }
+
+  .subscribe.split input:focus-visible {
+    outline: 2px solid var(--blue);
+    outline-offset: 2px;
+  }
+
+  .subscribe.split .btn {
+    height: 56px;
+    border-radius: 6px;
+    letter-spacing: 0.02em;
   }
 
   .subscribe-error {

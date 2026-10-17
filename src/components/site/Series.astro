@@ -9,29 +9,6 @@ import { series, latest } from '../../data/site';
       <h2 class="section-title">Four series. One enemy: the monthly bill.</h2>
     </div>
 
-    <figure class="receipt" aria-label="Example of a monthly software bill being cut">
-      <div class="row top">
-        <span class="strong">YOUR SOFTWARE BILL</span>
-        <span class="muted">/ MONTH</span>
-      </div>
-      <div class="lines">
-        <div class="pair">
-          <span class="strike">ManyChat Pro</span>
-          <span class="strike num">$39.00</span>
-          <span class="blue">→ my own DM bot</span>
-          <span class="blue num">$0.00</span>
-        </div>
-        <div class="pair">
-          <span>[Next app you pay for]</span>
-          <span class="num">$[XX].00</span>
-        </div>
-      </div>
-      <div class="pair total">
-        <span>NOW YOU PAY</span>
-        <span class="num">$0.00</span>
-      </div>
-      <figcaption>ManyChat Pro, monthly plan, Sep 2026.</figcaption>
-    </figure>
   </div>
 
   <div class="cards">
@@ -73,91 +50,13 @@ import { series, latest } from '../../data/site';
   }
 
   .head {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr));
-    gap: 32px;
-    align-items: center;
+    display: block;
   }
 
   .titles {
     display: flex;
     flex-direction: column;
     gap: 12px;
-  }
-
-  .receipt {
-    justify-self: end;
-    width: 100%;
-    max-width: 360px;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 22px;
-    background: var(--paper);
-    border: 1px solid var(--rule);
-    border-radius: 6px;
-    font-family: var(--font-mono);
-    font-size: 13px;
-    line-height: 1.5;
-    transform: rotate(2deg);
-    box-shadow: 0 18px 40px -18px rgba(18, 18, 18, 0.35);
-  }
-
-  .row {
-    display: flex;
-    justify-content: space-between;
-    gap: 12px;
-  }
-
-  .top {
-    padding-bottom: 12px;
-    border-bottom: 1px dashed #B8BCC4;
-  }
-
-  .strong {
-    font-weight: 600;
-    letter-spacing: 0.06em;
-  }
-
-  .muted {
-    color: var(--muted);
-  }
-
-  .lines {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    padding: 16px 0;
-    border-bottom: 1px dashed #B8BCC4;
-  }
-
-  .pair {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    gap: 2px 12px;
-  }
-
-  .receipt .strike {
-    text-decoration-thickness: 2px;
-  }
-
-  .blue {
-    color: var(--blue);
-    font-weight: 600;
-  }
-
-  .num {
-    font-variant-numeric: tabular-nums;
-  }
-
-  .total {
-    padding-top: 12px;
-    font-weight: 600;
-  }
-
-  figcaption {
-    margin-top: 10px;
-    font-size: 11px;
-    color: var(--muted);
   }
 
   .cards {
@@ -244,11 +143,6 @@ import { series, latest } from '../../data/site';
   }
 
   @media (max-width: 640px) {
-    .receipt {
-      justify-self: start;
-      transform: rotate(1deg);
-    }
-
     .item {
       grid-template-columns: minmax(0, 1fr);
       gap: 6px;
