@@ -22,3 +22,7 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# CDev evidence and Playwright MCP output
+/logs/
+/.playwright-mcp/

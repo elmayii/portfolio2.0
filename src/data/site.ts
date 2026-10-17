@@ -8,7 +8,7 @@ export const site = {
   title: 'Mario Perera — Welcome to the SaaS-Killing World',
   description:
     'I rebuild the apps you pay for with AI and show you how. Free guides, a member vault your AI installs for you, and help for teams.',
-  readers: '[N]',
+  readers: '+100',
   // Set PUBLIC_SUBSTACK_URL (e.g. https://saaskillingworld.substack.com) to send sign-ups to Substack.
   substackUrl: import.meta.env.PUBLIC_SUBSTACK_URL ?? '',
 };

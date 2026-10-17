@@ -12,7 +12,7 @@ runtime evidence, so later batches start from a verified base.
 
 ### Batch 01 — Astro 7 toolchain green + type gate
 
-Status: READY
+Status: DONE
 
 Context: the working tree carries the human's uncommitted Astro 5.9 → 7.4 bump (plus
 `readers: '+100'` in `site.ts`). This batch absorbs it (DECISIONS 2026-10-17). The dependency
@@ -47,7 +47,15 @@ Acceptance:
 
 ### Batch 02 — Runtime baseline of every flow
 
-Status: PENDING
+Status: READY
+
+Known defects carried from Batch 01 (fix here):
+- D1 `/r/playbook` hero broken at every width: `.copy` names both the hero copy `<div>`
+  (line 139) and the "Copy prompt" `<button>` (line 213), so the button rule (line 507: 44px
+  height, ink background, white text) also hits the div — the H1 renders white on a black 44px
+  bar and the lede spills into the members band. Root fix: give the button its own class.
+- D2 `/welcome` is `noindex` but listed in `dist/sitemap-0.xml`. Root fix: `filter` in the
+  sitemap integration config.
 
 Tasks:
 - Drive every interactive flow on preview with Playwright: subscribe form (empty, invalid,
