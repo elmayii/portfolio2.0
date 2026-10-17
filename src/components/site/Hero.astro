@@ -7,10 +7,10 @@ import { site } from '../../data/site';
 <div class="hero-shell">
   <img
     class="hero-photo"
-    src="/images/mario-hero-bw.jpg"
+    src="/images/mario-portrait-bw.jpg"
     alt="Mario Perera"
-    width="1200"
-    height="1429"
+    width="1100"
+    height="1324"
     fetchpriority="high"
   />
   <div class="hero-fade" aria-hidden="true"></div>
@@ -42,16 +42,19 @@ import { site } from '../../data/site';
     background: var(--paper);
   }
 
+  /* Portrait kept at its own proportions on the right, so the face takes about a third of the hero height. */
   .hero-photo {
     position: absolute;
     top: 0;
     right: 0;
-    width: 60%;
     height: 100%;
+    width: auto;
+    aspect-ratio: 1100 / 1324;
+    max-width: 58%;
     object-fit: cover;
-    object-position: 50% 22%;
-    -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.5) 20%, #000 46%);
-    mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.5) 20%, #000 46%);
+    object-position: 50% 30%;
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.55) 22%, #000 42%);
+    mask-image: linear-gradient(to right, transparent 0%, rgba(0, 0, 0, 0.55) 22%, #000 42%);
   }
 
   .hero-fade {
@@ -130,8 +133,10 @@ import { site } from '../../data/site';
   @media (max-width: 760px) {
     .hero-photo {
       width: 100%;
+      max-width: none;
       height: 440px;
-      object-position: 50% 18%;
+      aspect-ratio: auto;
+      object-position: 50% 30%;
       -webkit-mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
       mask-image: linear-gradient(to bottom, #000 55%, transparent 100%);
     }
