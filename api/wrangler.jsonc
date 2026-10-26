@@ -1,0 +1,26 @@
+// srperera-api — POST /api/lead (contract: workspace workspace/contracts/sb-01-01.md).
+// Run from this folder with `npx wrangler@4 ...`; no package.json on purpose (DECISIONS 2026-10-26).
+{
+	"$schema": "https://unpkg.com/wrangler@4.152.0/config-schema.json",
+	"name": "srperera-api",
+	"main": "src/index.ts",
+	"compatibility_date": "2026-10-20",
+	"workers_dev": false,
+	// A Worker route wins over the Pages custom domain that serves the static site, so only /api/* lands here.
+	"routes": [{ "pattern": "srperera.com/api/*", "zone_name": "srperera.com" }],
+	"observability": { "enabled": true },
+	"d1_databases": [
+		{
+			"binding": "DB",
+			"database_name": "srperera",
+			// HUMAN GATE: replace with the id printed by `npx wrangler@4 d1 create srperera`.
+			"database_id": "00000000-0000-0000-0000-000000000000"
+		}
+	],
+	"send_email": [{ "name": "EMAIL", "allowed_sender_addresses": ["guides@mail.srperera.com"] }],
+	// Per-IP limit on the web (Turnstile) path. namespace_id must be unique in the account.
+	"ratelimits": [{ "name": "WEB_LIMIT", "namespace_id": "2601", "simple": { "limit": 5, "period": 60 } }],
+	"vars": { "TURNSTILE_HOSTNAMES": "srperera.com" },
+	// Values are set by the human with `wrangler secret put`; deploy fails while any is missing.
+	"secrets": { "required": ["LEAD_SECRET", "TURNSTILE_SECRET"] }
+}

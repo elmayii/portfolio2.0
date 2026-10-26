@@ -2,6 +2,27 @@
 
 > Append decisions as they are made. Format: date — decision — rationale.
 
+- 2026-10-27 — `api/` is its own TypeScript project: `api/tsconfig.json` (workerd runtime types
+  from the committed `npx wrangler@4 types` output `api/worker-configuration.d.ts`, no DOM) with
+  its own gate `npx tsc -p api`. The root `tsconfig.json` is **not** changed (no exclusion): its
+  `**/*` include keeps `api/` under `npx astro check` too, so the Worker code is written to pass
+  both (hence a hand-rolled constant-time compare instead of workerd-only
+  `crypto.subtle.timingSafeEqual`). — Sprint 02 / Batch 04; honours the "no exclusion to pass a
+  gate" rule. Side effect: the Worker's global types are visible to the site's type check.
+- 2026-10-27 — Pure logic of the Worker lives in `api/src/lead.ts`, not `index.ts`. — workerd
+  treats every named export of the main module as an entrypoint and refuses to start with a
+  non-handler export (`Incorrect type for map entry 'DAILY_CAP'`), seen in `wrangler dev`.
+- 2026-10-27 — `/api/lead` details the contract leaves open (agent, reversible): daily cap counts
+  the email + keyword requests of the current **UTC calendar day** (4th → `sent: false`, the
+  request is still recorded); validation runs before auth (a malformed request never burns a
+  single-use Turnstile token); a wrong `X-Lead-Secret` falls back to Turnstile; Turnstile must
+  report a hostname in `TURNSTILE_HOSTNAMES` (`srperera.com`), no `action` check; web limit 5
+  requests / 60 s per `CF-Connecting-IP` (namespace `2601`); `people.consent_at` and `source`
+  keep the first value; an email-send failure still answers `200 {sent:false}` (the lead is
+  stored) and logs only the error code; other paths 404, other methods 405.
+- 2026-10-27 — The pure-logic test command is `node --test "api/**/*.test.ts"`: on Node 24
+  `node --test api/` tries to load `api` as a module and fails.
+
 - 2026-10-26 — **Hosting moves to Cloudflare; the API is a separate Worker in `api/`** at route
   `srperera.com/api/*`. The site stays static (no adapter). — Human; isolates secrets and
   dependencies from the site (workspace DECISIONS 2026-10-26).

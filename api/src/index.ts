@@ -1,0 +1,94 @@
+// srperera-api — POST /api/lead for ManyChat (X-Lead-Secret), the TikTok guide page and the
+// site's subscribe form (Turnstile + per-IP limit). Contract: workspace workspace/contracts/sb-01-01.md.
+// Pure logic lives in lead.ts (tested by lead.test.ts: `node --test "api/**/*.test.ts"`).
+import { guideEmail, parseLead, underDailyCap } from './lead.ts';
+
+const FROM = { email: 'guides@mail.srperera.com', name: 'Mario Perera' };
+const REPLY_TO = 'hello@srperera.com';
+
+const json = (status: number, body: Record<string, unknown>) => Response.json(body, { status });
+
+async function sameSecret(a: string, b: string): Promise<boolean> {
+  // Constant-time compare of the SHA-256 digests (equal length by construction). Hand-rolled instead of
+  // workerd's crypto.subtle.timingSafeEqual so the file also type-checks under the site's DOM tsconfig.
+  const enc = new TextEncoder();
+  const [ha, hb] = await Promise.all(
+    [a, b].map(async (s) => new Uint8Array(await crypto.subtle.digest('SHA-256', enc.encode(s)))),
+  );
+  let diff = 0;
+  for (let i = 0; i < ha.length; i++) diff |= ha[i] ^ hb[i];
+  return diff === 0;
+}
+
+async function turnstileOk(token: string, ip: string, env: Env): Promise<boolean> {
+  try {
+    const r = await fetch('https://challenges.cloudflare.com/turnstile/v0/siteverify', {
+      method: 'POST',
+      body: new URLSearchParams({ secret: env.TURNSTILE_SECRET, response: token, remoteip: ip }),
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (!r.ok) return false;
+    const v = await r.json<{ success?: boolean; hostname?: string }>();
+    const hosts = env.TURNSTILE_HOSTNAMES.split(',').map((h) => h.trim());
+    return v.success === true && hosts.includes(v.hostname ?? '');
+  } catch {
+    return false;
+  }
+}
+
+export default {
+  async fetch(request, env): Promise<Response> {
+    if (new URL(request.url).pathname !== '/api/lead') return new Response(null, { status: 404 });
+    if (request.method !== 'POST') return new Response(null, { status: 405, headers: { Allow: 'POST' } });
+
+    let body: unknown;
+    try {
+      body = await request.json();
+    } catch {
+      return json(400, { ok: false, error: 'invalid_body' });
+    }
+    // Validate before auth so a malformed request never burns a single-use Turnstile token.
+    const lead = parseLead(body);
+    if (typeof lead === 'string') return json(400, { ok: false, error: lead });
+
+    const secret = request.headers.get('X-Lead-Secret');
+    const viaSecret = !!secret && !!env.LEAD_SECRET && (await sameSecret(secret, env.LEAD_SECRET));
+    if (!viaSecret) {
+      if (!lead.turnstile) return json(403, { ok: false, error: 'forbidden' });
+      const ip = request.headers.get('CF-Connecting-IP') ?? '';
+      if (!(await env.WEB_LIMIT.limit({ key: ip })).success) return json(429, { ok: false, error: 'rate_limited' });
+      if (!(await turnstileOk(lead.turnstile, ip, env))) return json(403, { ok: false, error: 'forbidden' });
+    }
+
+    const now = new Date().toISOString();
+    // One transaction: upsert the person, count today's earlier requests, record this one.
+    const [, prior] = await env.DB.batch<{ n: number }>([
+      env.DB.prepare(
+        `INSERT INTO people (email, source, consent_at, substack, created_at, updated_at)
+         VALUES (?1, ?2, ?3, NULL, ?3, ?3)
+         ON CONFLICT (email) DO UPDATE SET updated_at = excluded.updated_at`,
+      ).bind(lead.email, lead.source, now),
+      env.DB.prepare(
+        'SELECT count(*) AS n FROM requests WHERE email = ?1 AND keyword IS ?2 AND created_at >= ?3',
+      ).bind(lead.email, lead.keyword, now.slice(0, 10)),
+      env.DB.prepare('INSERT INTO requests (email, keyword, source, created_at) VALUES (?1, ?2, ?3, ?4)').bind(
+        lead.email,
+        lead.keyword,
+        lead.source,
+        now,
+      ),
+    ]);
+
+    let sent = false;
+    if (lead.keyword !== null && underDailyCap(prior.results[0]?.n ?? 0)) {
+      try {
+        await env.EMAIL.send({ to: lead.email, from: FROM, replyTo: REPLY_TO, ...guideEmail(lead.keyword) });
+        sent = true;
+      } catch (e) {
+        // The lead is stored; report sent=false. Log the error code only, never the address.
+        console.error('send_failed', (e as { code?: string }).code ?? 'unknown');
+      }
+    }
+    return json(200, { ok: true, sent });
+  },
+} satisfies ExportedHandler<Env>;

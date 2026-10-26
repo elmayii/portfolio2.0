@@ -3,6 +3,54 @@
 > Handoff log. One entry per meaningful step, **newest first** (the ordering is declared in the
 > protocol; never mix orderings). Do not exaggerate progress.
 
+## 2026-10-27 — Sprint 02, Batch 04 — `/api/lead` capture Worker (SYS-01-B01)
+
+Status: BLOCKED (code + local evidence done; live acceptance waits for the human deploy gates)
+
+Completed:
+- `api/` Worker `srperera-api`: `POST /api/lead` per the contract — validation, auth by
+  `X-Lead-Secret` (constant-time) or Turnstile (siteverify + hostname check), per-IP limit on the
+  web path, upsert `people` + row in `requests` in one D1 batch, max 3 guide emails per email +
+  keyword per UTC day, Spanish text + HTML email from `Mario Perera <guides@mail.srperera.com>`,
+  reply-to `hello@srperera.com`. Route `srperera.com/api/*`; the static site is untouched.
+- Config verified against current Cloudflare docs (send_email `allowed_sender_addresses`,
+  `ratelimits`, D1, `secrets.required`, Turnstile siteverify/test keys). `database_id` is a marked
+  placeholder.
+- Type gate solved without touching the root tsconfig: `api/tsconfig.json` + committed
+  `wrangler types` output, gate `npx tsc -p api`; `astro check` also covers `api/` (DECISIONS).
+- Defect found and fixed during runtime: workerd refused to start because the main module had
+  non-handler named exports → pure logic moved to `api/src/lead.ts`.
+- Report `docs/develop/reports/sprint-02-batch-04.md`: shapes, ManyChat call, local evidence
+  table, the exact human commands in order. No secrets anywhere.
+
+Files changed:
+- `api/wrangler.jsonc`, `api/src/index.ts`, `api/src/lead.ts`, `api/src/lead.test.ts`,
+  `api/schema.sql`, `api/tsconfig.json`, `api/worker-configuration.d.ts` (generated), `.gitignore`
+  (`/api/.wrangler/`, `/api/.dev.vars*`), `docs/develop/reports/sprint-02-batch-04.md`,
+  `docs/develop/SPRINTS.md`, `docs/develop/DECISIONS.md`, `docs/develop/AGENT_PROGRESS.md`
+
+Verification:
+- npm ci: not-run (no dependency change)
+- node --test "api/**/*.test.ts": pass — 6/6
+- npx tsc -p api: pass — 0 errors
+- npm run check: pass — 0 errors, 0 warnings, 13 hints (legacy)
+- npm run build: pass — 3 pages, sitemap written
+- npx wrangler@4 deploy --dry-run: pass — EMAIL (sender-restricted), DB, WEB_LIMIT, var
+- local runtime (`wrangler dev --local`, local D1, simulated email, Turnstile test keys): pass —
+  200 / `sent:false` on the 4th request / 400 / 403 (no header, wrong secret, failed Turnstile,
+  hostname mismatch) / 429 on the 6th web request; 403/400 left no row (table in the report)
+- Playwright evidence: not-run — no UI touched (the Worker has no page; curl is the evidence)
+- live acceptance: not-run — waits for the human gates
+
+Blockers (minimum human decision):
+- Run, in order (report § Human actions): `d1 create srperera` (give the id), `d1 execute
+  --remote --file schema.sql`, create the Turnstile widget (give the site key), `secret put
+  LEAD_SECRET` + `TURNSTILE_SECRET`, `deploy`; then the live acceptance curls + Gmail check.
+
+Next:
+- After the deploy: put the `database_id` in `api/wrangler.jsonc`, run the live acceptance,
+  record it here and close Batch 04 as DONE.
+
 ## 2026-10-26 — Sprint 02 / Batch 04 re-planned (SYS-01-B01)
 
 Status: PLANNED

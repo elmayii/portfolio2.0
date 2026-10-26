@@ -126,7 +126,11 @@ Acceptance:
 
 ### Batch 04 — `/api/lead` capture Worker
 
-Status: PENDING
+Status: BLOCKED
+
+Unblocks with: the human gates listed in `docs/develop/reports/sprint-02-batch-04.md` (D1 create
++ schema, Turnstile widget, secrets, deploy), then the live acceptance. Code and local evidence
+are done on `cdev/sprint-02-batch-04`.
 
 System Reference: SYS-01-B01 (contract: workspace `workspace/contracts/sb-01-01.md`).
 
@@ -158,7 +162,8 @@ Tasks:
   Turnstile site key, how ManyChat calls it. No secrets.
 
 Acceptance:
-- `npm run check` and `npm run build` green (the site is untouched); `node --test api/` green.
+- `npm run check` and `npm run build` green (the site is untouched); `node --test api/` green
+  (real command: `node --test "api/**/*.test.ts"`, DECISIONS 2026-10-27); `npx tsc -p api` green.
 - Live, after the approved deploy: with the header → 200, row in D1 with `source=instagram`,
   the email reaches the human's Gmail in Spanish with the guide link and the Substack button;
   without header or Turnstile → 403 and no row; bad email → 400; fourth request of the same
