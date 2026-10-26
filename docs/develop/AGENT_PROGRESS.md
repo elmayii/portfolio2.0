@@ -3,6 +3,19 @@
 > Handoff log. One entry per meaningful step, **newest first** (the ordering is declared in the
 > protocol; never mix orderings). Do not exaggerate progress.
 
+## 2026-10-26 — Sprint 02 / Batch 04 re-planned (SYS-01-B01)
+
+Status: PLANNED
+
+Completed:
+- Batch 04 rewritten from `/api/subscribe` to the `/api/lead` capture Worker in `api/`; its
+  blockers closed by the human (DECISIONS 2026-10-26). System Reference: SYS-01-B01, contract
+  in the workspace `workspace/contracts/sb-01-01.md`.
+
+Next:
+- `/cdev` on Batch 04 from a `cdev/sprint-02-batch-04` branch. Deploy, D1 creation and secrets
+  wait for the human at the moment.
+
 ## 2026-10-17 17:50 — Sprint 01 merged
 
 Status: DONE

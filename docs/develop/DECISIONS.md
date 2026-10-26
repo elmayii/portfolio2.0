@@ -2,6 +2,21 @@
 
 > Append decisions as they are made. Format: date — decision — rationale.
 
+- 2026-10-26 — **Hosting moves to Cloudflare; the API is a separate Worker in `api/`** at route
+  `srperera.com/api/*`. The site stays static (no adapter). — Human; isolates secrets and
+  dependencies from the site (workspace DECISIONS 2026-10-26).
+- 2026-10-26 — **One endpoint, `/api/lead`**, for ManyChat (shared secret), the TikTok guide
+  page and the subscribe form (Turnstile + per-IP limit). People are stored in D1 (`people`,
+  reused later by the vault). — Human.
+- 2026-10-26 — **Email from Cloudflare Email Service**: `guides@mail.srperera.com`, reply-to
+  `hello@srperera.com`, in Spanish, guide link + invitation to Substack. — Human.
+- 2026-10-26 — **Gates opened for Sprint 02 / Batch 04 only:** an API route (as the separate
+  Worker), D1, and `npx wrangler@4` without adding it to `package.json`. Deploy, D1 creation and
+  every secret stay human-run at the moment. — Human («lo hago todo yo» for the keys).
+- 2026-10-26 — Assumptions (no question): resend allowed up to 3 times a day per email +
+  keyword; unsubscribe/delete by replying to the email; the email link `/r/<keyword>` is served
+  by the site from SYS-01-B02, so it may 404 until then.
+
 - 2026-10-17 — Role resolved as **frontend** (static, no backend). — Astro static output, no
   adapter or API routes; external services by link only.
 - 2026-10-17 — Batch branches are cut from `feat/saas-killing-world-alt2`, not `main`. —

@@ -124,12 +124,46 @@ Acceptance:
 - `astro check` 0 errors and 0 hints from legacy; build passes; the three routes look identical
   to `logs/evidence/01-02/` captures.
 
-### Batch 04 — `/api/subscribe`
+### Batch 04 — `/api/lead` capture Worker
 
-Status: BLOCKED
+Status: PENDING
 
-Unblocks with: the email provider and its API, hosting confirmed (README says Vercel), approval
-to add the adapter and switch the route to server output (safety gate).
+System Reference: SYS-01-B01 (contract: workspace `workspace/contracts/sb-01-01.md`).
+
+Was `/api/subscribe`. Its blockers were closed by the human on 2026-10-26 (DECISIONS): email
+provider = Cloudflare Email Service, hosting = Cloudflare, and the API is a **separate Worker**
+in `api/`, so the site itself stays static (no adapter, no server output). One endpoint serves
+ManyChat, the TikTok guide page and the site's subscribe form.
+
+Tasks:
+- `api/` folder: `wrangler.jsonc` (Worker `srperera-api`, route `srperera.com/api/*` on zone
+  `srperera.com`, D1 binding `DB`, `send_email` binding, rate limiting binding), `src/index.ts`
+  and `schema.sql`. No `package.json`: run with `npx wrangler@4`; test with `node --test`
+  (Node 24 strips types). No new dependency in the site.
+- `POST /api/lead` exactly as the contract: validation, auth (`X-Lead-Secret` header or a
+  Turnstile token), rate limit per IP on the web path, upsert in `people`, row in `requests`,
+  at most 3 sends per email + keyword per day.
+- Email in Spanish, text + HTML: guide link `https://srperera.com/r/<keyword>`, a join button to
+  `https://srperera.substack.com/subscribe`, footer "reply to unsubscribe or delete your data".
+  From `Mario Perera <guides@mail.srperera.com>`, reply-to `hello@srperera.com`.
+- One `api/src/lead.test.ts` with the pure logic (body validation, keyword normalisation, daily
+  cap decision).
+- Prepared, not executed by the agent (human gates):
+  - the human creates the Turnstile widget for `srperera.com` and gives the **site key**
+    (public) and runs `! npx wrangler@4 secret put TURNSTILE_SECRET` and
+    `! npx wrangler@4 secret put LEAD_SECRET` himself — the agent never sees a secret;
+  - `npx wrangler@4 d1 create srperera`, `d1 execute --remote --file api/schema.sql` and
+    `npx wrangler@4 deploy` run only with the human's OK at that moment.
+- Report `docs/develop/reports/sprint-02-batch-04.md`: deployed URL, request/response shapes,
+  Turnstile site key, how ManyChat calls it. No secrets.
+
+Acceptance:
+- `npm run check` and `npm run build` green (the site is untouched); `node --test api/` green.
+- Live, after the approved deploy: with the header → 200, row in D1 with `source=instagram`,
+  the email reaches the human's Gmail in Spanish with the guide link and the Substack button;
+  without header or Turnstile → 403 and no row; bad email → 400; fourth request of the same
+  email + keyword in a day → `sent: false`.
+- The report exists and contains no secret.
 
 ## PROPOSAL — Next phase drafts (not active)
 
