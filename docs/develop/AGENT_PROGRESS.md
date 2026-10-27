@@ -3,6 +3,19 @@
 > Handoff log. One entry per meaningful step, **newest first** (the ordering is declared in the
 > protocol; never mix orderings). Do not exaggerate progress.
 
+## 2026-10-27 — Sprint 02 re-planned for SYS-01-B02 (site on srperera.com)
+
+Status: PLANNED
+
+Completed:
+- Batch 01 and Batch 02 unblocked by the human's decisions (DECISIONS 2026-10-27); new Batch 05
+  (capture on the site) and Batch 06 (publish). Order: 01 → 05 → 02 → 06. System Reference
+  SYS-01-B02; contracts `sb-01-01` (API) and `sb-01-02` (panel data) in the workspace.
+
+Next:
+- `/cdev` on Batch 01. Batch 05's Turnstile part waits for the site key; Batch 06's merge and push
+  wait for the human at the moment.
+
 ## 2026-10-27 — Sprint 02 / Batch 04 closed (SYS-01-B01)
 
 Status: DONE

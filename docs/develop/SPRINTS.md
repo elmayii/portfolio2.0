@@ -83,28 +83,40 @@ PRODUCT.md and stay open questions until their inputs exist.
 
 ### Batch 01 — Fill launch placeholders
 
-Status: BLOCKED
+Status: PENDING
 
-Unblocks with: real URLs for TikTok, X and Substack; the "RADAR #1" target; the next episode
-title; the next pack name + one line.
+System Reference: SYS-01-B02 (contract: workspace `workspace/contracts/sb-01-02.md`).
+
+Unblocked 2026-10-27 (DECISIONS): the social URLs come from the panel (contract `sb-01-02`, read
+from its real DB); every value the human has not given (RADAR #1 target, next episode, next pack,
+reader count) is **hidden**, not left as `[brackets]` or `#`.
 
 Tasks:
-- Replace the `[brackets]` and `href: '#'` values in `src/data/site.ts` with the provided ones.
+- Socials in `src/data/site.ts` from the contract: Instagram, TikTok, LinkedIn (the panel's URL
+  replaces the current one), X, Substack; GitHub stays. `substackUrl` = the Substack URL.
+- Items without a real value are not rendered (latest cards, next episode, next pack, reader
+  count); components skip entries without a value instead of showing `#` or `[brackets]`.
 - Socials with real URLs flow into JSON-LD `sameAs` automatically (only `http` URLs).
 
 Acceptance:
-- No `[` placeholder and no `'#'` link left in `site.ts` for the provided items.
+- No `[` placeholder and no `'#'` link rendered anywhere in the built HTML.
+- `site.ts` socials equal the contract values (L2 check in `sb-01-02`).
 - Footer, latest cards and JSON-LD checked in the built HTML; Playwright on `/` at 1280/375.
 
 ### Batch 02 — Spanish version
 
-Status: BLOCKED
+Status: PENDING
 
-Unblocks with: routing choice (`/es/` with Astro i18n vs. browser-language detection) and who
-writes or approves the Spanish copy.
+System Reference: SYS-01-B02. Runs after Batch 05.
+
+Unblocked 2026-10-27 (DECISIONS): English at the root, Spanish under `/es/` (Astro i18n); on the
+first visit a small inline script sends Spanish browsers (`navigator.languages` starting with
+`es`) to `/es/…`; everyone else stays in English (fallback). A visible language switch stores the
+choice and wins over detection. The agent translates the existing approved copy; the human
+reviews the Spanish pages on the preview before publishing (Batch 06).
 
 Tasks:
-- Implement the chosen routing; Spanish copy beside `site.ts` with the same shape; `lang`,
+- Implement that routing; Spanish copy beside `site.ts` with the same shape; `lang`,
   `og:locale`, `hreflang` per page.
 
 Acceptance:
@@ -127,10 +139,6 @@ Acceptance:
 ### Batch 04 — `/api/lead` capture Worker
 
 Status: DONE (2026-10-27; live on `https://api.srperera.com/lead`)
-
-Unblocks with: the human gates listed in `docs/develop/reports/sprint-02-batch-04.md` (D1 create
-+ schema, Turnstile widget, secrets, deploy), then the live acceptance. Code and local evidence
-are done on `cdev/sprint-02-batch-04`.
 
 System Reference: SYS-01-B01 (contract: workspace `workspace/contracts/sb-01-01.md`).
 
@@ -169,6 +177,60 @@ Acceptance:
   without header or Turnstile → 403 and no row; bad email → 400; fourth request of the same
   email + keyword in a day → `sent: false`.
 - The report exists and contains no secret.
+
+### Batch 05 — Capture on the site
+
+Status: PENDING
+
+System Reference: SYS-01-B02 (contracts: workspace `sb-01-01` and `sb-01-02`).
+
+Wait-for: `docs/develop/reports/sprint-02-batch-04.md` (the live API: URL, shapes, CORS).
+
+Unblocks with (only for the Turnstile part): the Turnstile **site key** (public), given by the
+human. Everything else can start.
+
+Tasks:
+- Subscribe form: `POST https://api.srperera.com/lead` with `source: web`, no keyword,
+  `consent` checkbox (GDPR) and a Turnstile widget; on `200` keep today's behaviour (open the
+  Substack subscribe page with the email, go to `/welcome?source=`). Clear error states for 400 /
+  403 / 429.
+- `/guia/[palabra]` (Spanish, `noindex`): one page for every keyword — title from the keyword,
+  email + consent + Turnstile, `POST` with `source: tiktok` and the keyword, "te lo he enviado".
+  Implemented as a single static page plus a rewrite in `public/_redirects`, so a new keyword needs
+  no rebuild.
+- `/r/<palabra>` mechanism: `public/_redirects` with one commented example line; real lines are
+  added when a guide exists (its target is the guide's post or page).
+- Vault hidden: the Vault section, its header link and every member/vault mention stop rendering;
+  `/welcome` keeps the confirmation and loses the paid plans. Components stay in the repo for the
+  vault (SYSTEM Sprint 02).
+- `/r/playbook` removed: the page goes; `_redirects` sends `/r/playbook` to `/` (301).
+- README and PRODUCT.md updated (Before launch list, routes).
+
+Acceptance:
+- `npm run check`, `npm run build` green; Playwright on the preview at 1280/375: the form shows
+  the widget and the consent box; with Cloudflare's always-pass test site key a submit reaches the
+  API (a 403 from the real API is expected with the test key — the live 200 is checked in Batch 06);
+  `/guia/prueba` renders in Spanish; no Vault anywhere; `/r/playbook` → `/`.
+
+### Batch 06 — Publish the new site on srperera.com
+
+Status: PENDING
+
+System Reference: SYS-01-B02.
+
+Tasks:
+- Pages build green for this line: read the failing build log of the `feat/saas-killing-world-alt2`
+  previews (they fail since the Astro 7 upgrade) and fix the cause (suspected Node version: pin it
+  the way Pages reads it, e.g. `.node-version`). Evidence: a green preview URL.
+- Prepared, executed only with the human's OK at that moment: merge the batch branches into
+  `feat/saas-killing-world-alt2`, then `feat/saas-killing-world-alt2` into `main`, push `main`;
+  Pages publishes `main` on srperera.com.
+- Live check on srperera.com.
+
+Acceptance:
+- srperera.com serves the new site (title, no Astro 5.9.3 generator); `/es/` for a Spanish
+  browser; socials as in `sb-01-02`; the live form: a real submit (by the human, real Turnstile)
+  answers 200 and a `people` row with `source=web` appears in D1.
 
 ## PROPOSAL — Next phase drafts (not active)
 

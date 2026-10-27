@@ -2,6 +2,16 @@
 
 > Append decisions as they are made. Format: date — decision — rationale.
 
+- 2026-10-27 — **Launch decisions for SYS-01-B02** (human, workspace DECISIONS 2026-10-27):
+  social URLs from the panel (LinkedIn `mario-sr-perera-b30921237`, X `mariosrperera`, TikTok
+  `@sr_perera_`, Substack `srperera.substack.com`); values not given are hidden; the Vault section
+  and the paid plans of `/welcome` are hidden until the vault exists; `/r/playbook` is removed
+  (301 to `/`; PLAYBOOK was discarded); the site is English and Spanish by browser language,
+  English fallback (`/es/`, Batch 02); publishing = merge into `main` with the human's OK.
+- 2026-10-27 — Assumptions (no question): `/guia/[palabra]` and the guide email are Spanish only;
+  the agent translates the approved English copy and the human reviews it on the preview before
+  Batch 06; the Vault components stay in the repo (hidden, not deleted).
+
 - 2026-10-27 — **The API moves to the Worker custom domain `api.srperera.com` (path `/lead`)**,
   not the route `srperera.com/api/*`: deployed that way, the route never fired because Pages serves
   `srperera.com`. The site calls it cross-origin: the Worker answers the `OPTIONS` preflight and
