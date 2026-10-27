@@ -3,6 +3,25 @@
 > Handoff log. One entry per meaningful step, **newest first** (the ordering is declared in the
 > protocol; never mix orderings). Do not exaggerate progress.
 
+## 2026-10-27 — Sprint 02 / Batch 04 closed (SYS-01-B01)
+
+Status: DONE
+
+Completed:
+- Live acceptance: the human ran the 200 path with `LEAD_SECRET` → `sent: true`; email in Gmail
+  (Promotions tab, inbox), Spanish, guide link + Substack link + footer; reply goes to
+  `hello@srperera.com` (human).
+
+Verification:
+- Live: 200 · 403 ×2 · 400 · 405 · 404 · CORS preflight · email received: pass.
+- Live daily cap: not-run (local evidence rows 7–9 pass).
+
+Known:
+- Gmail files the guide email under Promotions. Improvement for SYS-01-B04: plainer, personal HTML.
+
+Next:
+- SYS-01-B02 (site on srperera.com) — planned in the workspace.
+
 ## 2026-10-27 — Sprint 02 / Batch 04 deployed on api.srperera.com (SYS-01-B01)
 
 Status: BLOCKED (live 200 path waits for the human, who holds `LEAD_SECRET`)

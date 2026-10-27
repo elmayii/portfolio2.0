@@ -1,8 +1,7 @@
 # Report — Sprint 02 / Batch 04 — `/lead` capture Worker on api.srperera.com (SYS-01-B01)
 
-Status: **deployed 2026-10-27 on `https://api.srperera.com/lead`** (version `37cd6319`). Live checks
-without the secret pass; the live 200 path (email received) waits for the human, who holds
-`LEAD_SECRET`. D1, secrets and Turnstile were created by the human (DECISIONS 2026-10-26/27). Contract: workspace
+Status: **DONE — live on `https://api.srperera.com/lead`** (version `37cd6319`, 2026-10-27). Every
+live check passes, including the 200 path and the email received. D1, secrets and Turnstile were created by the human (DECISIONS 2026-10-26/27). Contract: workspace
 `workspace/contracts/sb-01-01.md`. This report holds **no secret values**.
 
 ## Where it lives
@@ -132,7 +131,12 @@ the always-fail secret (row 13).
 | `https://srperera.com/` | 200 (Pages, untouched) |
 | D1 rows after these | `people` 0 · `requests` 0 |
 
-Pending (human, holds the secret): the 200 path with the header and the email in Gmail.
+Live 200 path (run by the human with `LEAD_SECRET`, 2026-10-27 12:58 UTC): `ok: true, sent: true`;
+row in `requests` (`instagram`, `prueba`); the email reached the human's Gmail (checked through
+the Gmail connector): From `guides@mail.srperera.com`, subject `Tu guía: prueba`, Spanish body with
+the guide link, the Substack join link and the footer. Gmail filed it under **Promotions** (inbox,
+not spam). Reply goes to `hello@srperera.com` (confirmed by the human). The live daily cap was
+not re-run: covered by the local evidence (rows 7–9).
 
 ## Human actions, in order (from `api/`)
 

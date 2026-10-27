@@ -126,7 +126,7 @@ Acceptance:
 
 ### Batch 04 — `/api/lead` capture Worker
 
-Status: BLOCKED
+Status: DONE (2026-10-27; live on `https://api.srperera.com/lead`)
 
 Unblocks with: the human gates listed in `docs/develop/reports/sprint-02-batch-04.md` (D1 create
 + schema, Turnstile widget, secrets, deploy), then the live acceptance. Code and local evidence
