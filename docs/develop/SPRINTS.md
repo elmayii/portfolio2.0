@@ -140,7 +140,7 @@ in `api/`, so the site itself stays static (no adapter, no server output). One e
 ManyChat, the TikTok guide page and the site's subscribe form.
 
 Tasks:
-- `api/` folder: `wrangler.jsonc` (Worker `srperera-api`, route `srperera.com/api/*` on zone
+- `api/` folder: `wrangler.jsonc` (Worker `srperera-api`; deployed on the custom domain `api.srperera.com` — the planned route `srperera.com/api/*` on zone
   `srperera.com`, D1 binding `DB`, `send_email` binding, rate limiting binding), `src/index.ts`
   and `schema.sql`. No `package.json`: run with `npx wrangler@4`; test with `node --test`
   (Node 24 strips types). No new dependency in the site.

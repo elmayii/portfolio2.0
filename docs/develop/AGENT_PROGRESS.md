@@ -3,6 +3,25 @@
 > Handoff log. One entry per meaningful step, **newest first** (the ordering is declared in the
 > protocol; never mix orderings). Do not exaggerate progress.
 
+## 2026-10-27 — Sprint 02 / Batch 04 deployed on api.srperera.com (SYS-01-B01)
+
+Status: BLOCKED (live 200 path waits for the human, who holds `LEAD_SECRET`)
+
+Completed:
+- Human created D1 (schema applied), the Turnstile widget and both secrets; `database_id` set.
+- First deploy on route `srperera.com/api/*`: never fired (Pages answered 405/HTML). Human chose
+  the Worker custom domain `api.srperera.com`; path `/lead`, CORS for `https://srperera.com`.
+- Redeployed: version `37cd6319`, trigger `api.srperera.com (custom domain)`.
+
+Verification:
+- `node --test "api/**/*.test.ts"` 6/6 · `npx tsc -p api` · `npm run check` 0 errors: pass.
+- Live: 403 without auth and with a wrong secret · 400 bad email · 405 GET · 404 other path ·
+  preflight 204 with the allowed origin · site root 200 · D1 0 rows: pass.
+- Live 200 with the header and the email in Gmail: not-run (human).
+
+Next:
+- Human runs step 7 of the report; then close Batch 04 DONE.
+
 ## 2026-10-27 — Sprint 02, Batch 04 — `/api/lead` capture Worker (SYS-01-B01)
 
 Status: BLOCKED (code + local evidence done; live acceptance waits for the human deploy gates)

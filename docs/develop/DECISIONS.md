@@ -2,6 +2,11 @@
 
 > Append decisions as they are made. Format: date — decision — rationale.
 
+- 2026-10-27 — **The API moves to the Worker custom domain `api.srperera.com` (path `/lead`)**,
+  not the route `srperera.com/api/*`: deployed that way, the route never fired because Pages serves
+  `srperera.com`. The site calls it cross-origin: the Worker answers the `OPTIONS` preflight and
+  allows only `https://srperera.com`. — Human («sí, vamos por A»).
+
 - 2026-10-27 — `api/` is its own TypeScript project: `api/tsconfig.json` (workerd runtime types
   from the committed `npx wrangler@4 types` output `api/worker-configuration.d.ts`, no DOM) with
   its own gate `npx tsc -p api`. The root `tsconfig.json` is **not** changed (no exclusion): its

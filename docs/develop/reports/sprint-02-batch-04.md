@@ -1,7 +1,8 @@
-# Report — Sprint 02 / Batch 04 — `/api/lead` capture Worker (SYS-01-B01)
+# Report — Sprint 02 / Batch 04 — `/lead` capture Worker on api.srperera.com (SYS-01-B01)
 
-Status: **code and local evidence done; not deployed.** Deploy, D1 creation, secrets and the
-Turnstile widget are human gates (DECISIONS 2026-10-26). Contract: workspace
+Status: **deployed 2026-10-27 on `https://api.srperera.com/lead`** (version `37cd6319`). Live checks
+without the secret pass; the live 200 path (email received) waits for the human, who holds
+`LEAD_SECRET`. D1, secrets and Turnstile were created by the human (DECISIONS 2026-10-26/27). Contract: workspace
 `workspace/contracts/sb-01-01.md`. This report holds **no secret values**.
 
 ## Where it lives
@@ -9,8 +10,8 @@ Turnstile widget are human gates (DECISIONS 2026-10-26). Contract: workspace
 | Item | Value |
 |---|---|
 | Worker | `srperera-api` (folder `api/`, run with `npx wrangler@4` from `api/`) |
-| Deployed URL | `https://srperera.com/api/lead` — **pending deploy** (route `srperera.com/api/*`, zone `srperera.com`; a Worker route takes precedence over the Pages custom domain, so the static site keeps serving every other path) |
-| D1 | `srperera`, binding `DB`, `database_id` = **placeholder** `00000000-0000-0000-0000-000000000000` in `api/wrangler.jsonc` until `d1 create` runs |
+| Deployed URL | `https://api.srperera.com/lead` — Worker custom domain. The first deploy used the route `srperera.com/api/*`, which never fired: Pages serves `srperera.com` (DECISIONS 2026-10-27) |
+| D1 | `srperera`, binding `DB`, `database_id` = `f084ab8b-0ea0-4963-9199-1acd6017b5ff` (created 2026-10-27, region WEUR); `schema.sql` applied remotely 2026-10-27 (`people`, `requests`, index `requests_email_keyword_created`) |
 | Email | binding `EMAIL`, restricted to sender `guides@mail.srperera.com`; From `Mario Perera`, Reply-To `hello@srperera.com` |
 | Web rate limit | binding `WEB_LIMIT`, 5 requests / 60 s per `CF-Connecting-IP`, namespace `2601` |
 | Var | `TURNSTILE_HOSTNAMES = "srperera.com"` (comma-separated list) |
@@ -23,7 +24,7 @@ Files: `api/wrangler.jsonc`, `api/src/index.ts` (handler), `api/src/lead.ts` (pu
 
 ## Request
 
-`POST /api/lead`, `Content-Type: application/json`
+`POST https://api.srperera.com/lead`, `Content-Type: application/json`
 
 ```json
 { "email": "ana@example.com", "keyword": "playbook", "source": "instagram", "consent": true }
@@ -74,7 +75,7 @@ signature, and the footer "Responde a este correo para darte de baja o borrar tu
 
 External Request action:
 
-- Method `POST`, URL `https://srperera.com/api/lead`
+- Method `POST`, URL `https://api.srperera.com/lead`
 - Headers: `Content-Type: application/json`, `X-Lead-Secret: <LEAD_SECRET>` (pasted by Mario into
   ManyChat; never stored in a repo)
 - Body: `{"email":"{{email}}","keyword":"<the DM keyword>","source":"instagram","consent":true}`
@@ -84,7 +85,9 @@ External Request action:
 ## How the site calls it (SYS-01-B02)
 
 Turnstile widget (`data-sitekey="[TURNSTILE_SITE_KEY]"`) in the form; POST the same JSON with
-`"source":"web"` and `"turnstile": <token>`. Same origin, so no CORS is needed. Tokens are single
+`"source":"web"` and `"turnstile": <token>` to `https://api.srperera.com/lead`. Cross-origin:
+the Worker answers the `OPTIONS` preflight (204) and adds `Access-Control-Allow-Origin:
+https://srperera.com` only for that origin. Tokens are single
 use: reset the widget before a retry.
 
 ## Local evidence (no live account touched)
@@ -108,7 +111,7 @@ binding simulated (logged, not sent), and Cloudflare's public Turnstile test sec
 | 12b | web, test token, `TURNSTILE_HOSTNAMES=example.com` | 200 `sent:true`, row with `source=web` |
 | 13 | web, always-fail test secret `2x0000000000000000000000000000000AA` | 403 `forbidden` |
 | 14 | 6th web request from the same IP inside 60 s | 429 `rate_limited`; the secret path right after → 200 (not limited) |
-| 15 / 16 | `GET /api/lead` / `POST /api/other` | 405 / 404 |
+| 15 / 16 | `GET /lead` / `POST /other` | 405 / 404 |
 
 Simulated email (wrangler log): `From: "Mario Perera" <guides@mail.srperera.com>`,
 `To: test.lead@example.com`, `Subject: Tu guía: playbook`; the text body carries the guide link,
@@ -116,6 +119,20 @@ the Substack link and the reply footer. Reply-To is set in code (`replyTo`) but 
 simulator does not print it — checked live in step 7. Note: the always-pass test secret accepts
 **any** token string (verified against siteverify), so a "bad token" can only be exercised with
 the always-fail secret (row 13).
+
+## Live evidence (2026-10-27, after deploy)
+
+| Request | Result |
+|---|---|
+| POST without header or Turnstile | 403 `forbidden` |
+| POST `"email":"nope"` | 400 `invalid_email` |
+| POST with a wrong `X-Lead-Secret` | 403 `forbidden` |
+| `GET /lead` / `/otra` | 405 / 404 |
+| `OPTIONS /lead` with `Origin: https://srperera.com` | 204, `Access-Control-Allow-Origin: https://srperera.com` |
+| `https://srperera.com/` | 200 (Pages, untouched) |
+| D1 rows after these | `people` 0 · `requests` 0 |
+
+Pending (human, holds the secret): the 200 path with the header and the email in Gmail.
 
 ## Human actions, in order (from `api/`)
 
@@ -128,11 +145,11 @@ the always-fail secret (row 13).
    mode Managed). Give the agent the **site key** (public); keep the secret key.
 5. Set the secrets (each prompts for the value; the first asks to create the Worker — answer yes):
    `! npx wrangler@4 secret put LEAD_SECRET` and `! npx wrangler@4 secret put TURNSTILE_SECRET`
-6. Deploy: `npx wrangler@4 deploy` (creates the route `srperera.com/api/*`).
+6. Deploy: `npx wrangler@4 deploy` (creates the custom domain `api.srperera.com`). Done 2026-10-27.
 7. Live acceptance (bash; the secret is read without echo):
 
    ```bash
-   read -rs LEAD_SECRET; U=https://srperera.com/api/lead; ME=<your gmail>
+   read -rs LEAD_SECRET; U=https://api.srperera.com/lead; ME=<your gmail>
    curl -s -X POST $U -H 'Content-Type: application/json' -H "X-Lead-Secret: $LEAD_SECRET" \
      -d "{\"email\":\"$ME\",\"keyword\":\"playbook\",\"source\":\"instagram\",\"consent\":true}"   # 200 sent:true
    curl -s -X POST $U -H 'Content-Type: application/json' \

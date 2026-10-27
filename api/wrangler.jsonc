@@ -1,4 +1,4 @@
-// srperera-api — POST /api/lead (contract: workspace workspace/contracts/sb-01-01.md).
+// srperera-api — POST https://api.srperera.com/lead (contract: workspace workspace/contracts/sb-01-01.md).
 // Run from this folder with `npx wrangler@4 ...`; no package.json on purpose (DECISIONS 2026-10-26).
 {
 	"$schema": "https://unpkg.com/wrangler@4.152.0/config-schema.json",
@@ -6,15 +6,14 @@
 	"main": "src/index.ts",
 	"compatibility_date": "2026-10-20",
 	"workers_dev": false,
-	// A Worker route wins over the Pages custom domain that serves the static site, so only /api/* lands here.
-	"routes": [{ "pattern": "srperera.com/api/*", "zone_name": "srperera.com" }],
+	// Own subdomain: a route on srperera.com/api/* never fires, because Pages serves srperera.com (DECISIONS 2026-10-27).
+	"routes": [{ "pattern": "api.srperera.com", "custom_domain": true }],
 	"observability": { "enabled": true },
 	"d1_databases": [
 		{
 			"binding": "DB",
 			"database_name": "srperera",
-			// HUMAN GATE: replace with the id printed by `npx wrangler@4 d1 create srperera`.
-			"database_id": "00000000-0000-0000-0000-000000000000"
+			"database_id": "f084ab8b-0ea0-4963-9199-1acd6017b5ff"
 		}
 	],
 	"send_email": [{ "name": "EMAIL", "allowed_sender_addresses": ["guides@mail.srperera.com"] }],
