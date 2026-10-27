@@ -199,7 +199,14 @@ Tasks:
   Implemented as a single static page plus a rewrite in `public/_redirects`, so a new keyword needs
   no rebuild.
 - `/r/<palabra>` mechanism: `public/_redirects` with one commented example line; real lines are
-  added when a guide exists (its target is the guide's post or page).
+  added when a guide exists (its target is the guide's Substack post).
+- Worker `GET /posts` (in `api/`, contract `sb-01-01`): the 3 newest Substack posts from
+  `https://srperera.substack.com/api/v1/archive?sort=new&limit=3` (the RSS feed leaves out
+  subscriber-only posts), mapped to `{title, subtitle, url, date, cover}`, cached 15 min, CORS for
+  `https://srperera.com`; on any upstream error it answers `200 []`. Redeploy is a human gate.
+- "Latest" section: loads `/posts` on page load and renders up to 3 cards linking straight to the
+  Substack post (Substack itself asks for the email and subscribes; no form of ours in between);
+  hidden when the list is empty. It replaces the static `latest` placeholders.
 - Vault hidden: the Vault section, its header link and every member/vault mention stop rendering;
   `/welcome` keeps the confirmation and loses the paid plans. Components stay in the repo for the
   vault (SYSTEM Sprint 02).
@@ -210,7 +217,8 @@ Acceptance:
 - `npm run check`, `npm run build` green; Playwright on the preview at 1280/375: the form shows
   the widget and the consent box; with Cloudflare's always-pass test site key a submit reaches the
   API (a 403 from the real API is expected with the test key — the live 200 is checked in Batch 06);
-  `/guia/prueba` renders in Spanish; no Vault anywhere; `/r/playbook` → `/`.
+  `/guia/prueba` renders in Spanish; no Vault anywhere; `/r/playbook` → `/`; the Latest section
+  shows the example post (live `/posts` after the approved redeploy) and its card opens it.
 
 ### Batch 06 — Publish the new site on srperera.com
 

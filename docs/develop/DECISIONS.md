@@ -2,6 +2,12 @@
 
 > Append decisions as they are made. Format: date — decision — rationale.
 
+- 2026-10-27 — **Guides live in Substack as "Subscribers only" posts** (free subscribers included):
+  Substack shows the start and asks for the email to keep reading, which subscribes the reader.
+  The site lists the 3 newest posts through the Worker (`GET /posts`, Substack's archive JSON —
+  the RSS leaves those posts out) and links straight to them. — Human asked for it; mechanism
+  chosen by the agent («eso ya lo dirías tú»). First example post published 2026-10-27, web only.
+
 - 2026-10-27 — **Launch decisions for SYS-01-B02** (human, workspace DECISIONS 2026-10-27):
   social URLs from the panel (LinkedIn `mario-sr-perera-b30921237`, X `mariosrperera`, TikTok
   `@sr_perera_`, Substack `srperera.substack.com`); values not given are hidden; the Vault section
