@@ -105,7 +105,7 @@ Acceptance:
 
 ### Batch 02 — Spanish version
 
-Status: PENDING
+Status: DONE (2026-10-28)
 
 System Reference: SYS-01-B02. Runs after Batch 05.
 

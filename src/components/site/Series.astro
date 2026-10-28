@@ -1,32 +1,35 @@
 ---
-import { series, site } from '../../data/site';
+import { copy, langOf } from '../../data/i18n';
+
+const { series, site, ui } = copy(langOf(Astro.currentLocale));
+const t = ui.series;
 ---
 
 <section id="read" class="wrap series">
   <div class="head">
     <div class="titles">
-      <p class="eyebrow">The series</p>
-      <h2 class="section-title">Four series. One enemy: the monthly bill.</h2>
+      <p class="eyebrow">{t.eyebrow}</p>
+      <h2 class="section-title">{t.title}</h2>
     </div>
 
-    <figure class="receipt" aria-label="Example of a monthly software bill being cut">
+    <figure class="receipt" aria-label={t.receipt}>
       <div class="row top">
-        <span class="strong">YOUR SOFTWARE BILL</span>
-        <span class="muted">/ MONTH</span>
+        <span class="strong">{t.bill}</span>
+        <span class="muted">{t.perMonth}</span>
       </div>
       <div class="lines">
         <div class="pair">
           <span class="strike">ManyChat Pro</span>
           <span class="strike num">$39.00</span>
-          <span class="blue">→ my own DM bot</span>
+          <span class="blue">{t.instead}</span>
           <span class="blue num">$0.00</span>
         </div>
       </div>
       <div class="pair total">
-        <span>NOW YOU PAY</span>
+        <span>{t.total}</span>
         <span class="num">$0.00</span>
       </div>
-      <figcaption>ManyChat Pro, monthly plan, Sep 2026.</figcaption>
+      <figcaption>{t.caption}</figcaption>
     </figure>
   </div>
 
@@ -43,13 +46,13 @@ import { series, site } from '../../data/site';
   </div>
 
   <!-- Filled from the Worker's GET /posts (newest Substack posts); stays hidden when the list is empty. -->
-  <div class="latest" data-posts={`${site.apiUrl}/posts`} hidden>
-    <h2 class="eyebrow">Latest</h2>
+  <div class="latest" data-posts={`${site.apiUrl}/posts`} data-locale={ui.dateLocale} hidden>
+    <h2 class="eyebrow">{t.latest}</h2>
     <template>
       <a class="item">
         <span class="mono label"></span>
         <span class="title"></span>
-        <span class="mono cta">Read →</span>
+        <span class="mono cta">{t.read}</span>
       </a>
     </template>
   </div>
@@ -263,7 +266,7 @@ import { series, site } from '../../data/site';
           const d = new Date(p.date);
           a.querySelector('.label')!.textContent = isNaN(+d)
             ? ''
-            : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
+            : d.toLocaleDateString(box.dataset.locale, { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
           a.querySelector('.title')!.textContent = p.title;
           box.appendChild(a);
         }

@@ -77,7 +77,8 @@ verification (pass / fail / not-run), blockers naming the minimum human decision
 6. Layout is fluid (`auto-fit`/`minmax`/`clamp`); every change is checked at 375px.
 7. `[brackets]` and `#` placeholders are filled only with values the human provides.
 8. Legacy React files are neither extended nor deleted.
-9. Site copy is English (`<html lang="en">`) until the Spanish version is decided.
+9. English at the root, Spanish under `/es/`: copy in `src/data/site.ts` and its mirror `site.es.ts` (same
+   exports, same shape); a copy change edits both. `/guia` is Spanish only.
 
 ## Safety gates (prepare, never execute)
 

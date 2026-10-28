@@ -2,24 +2,26 @@
 import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/site/SiteHeader.astro';
 import SiteFooter from '../components/site/SiteFooter.astro';
-import { site } from '../data/site';
-// The member offer (perks, plans, FAQ) is hidden until the vault exists (DECISIONS 2026-10-27).
+import { copy, langOf } from '../data/i18n';
+// Also rendered as /es/welcome (src/pages/es/welcome.astro). The member offer (perks, plans, FAQ) is hidden until the vault exists (DECISIONS 2026-10-27).
+const { site, ui } = copy(langOf(Astro.currentLocale));
+const t = ui.welcome;
 ---
 
-<Layout title="You're in · Mario Perera" noindex>
+<Layout title={t.title} noindex>
   <SiteHeader />
   <main>
     <section class="wrap intro">
-      <p class="eyebrow">Subscribed</p>
-      <h1>You're in.</h1>
+      <p class="eyebrow">{t.eyebrow}</p>
+      <h1>{t.h1}</h1>
       <p class="lede">
-        One last step: confirm your subscription in the Substack tab that just opened.
-        No new tab? <a href={`${site.substackUrl}/subscribe`}>Subscribe on Substack</a>.
+        {t.lede}
+        {t.noTab} <a href={`${site.substackUrl}/subscribe`}>{t.subscribe}</a>.
       </p>
     </section>
 
     <div class="wrap stay">
-      <a href="/">Back to the home page</a>
+      <a href={Astro.currentLocale === 'es' ? '/es/' : '/'}>{t.back}</a>
     </div>
   </main>
   <SiteFooter />

@@ -1,26 +1,13 @@
 ---
-const doors = [
-  {
-    kicker: 'YOUR BUSINESS SELLS, BUT IT HIT A CEILING',
-    title: 'Growth Partner with Baskion',
-    text: 'We automate what you already do so you can serve more clients with the same team. We get paid only on results.',
-    cta: 'Apply as a partner',
-    href: 'mailto:mariomanuel.pereravaldes@gmail.com?subject=Growth%20Partner',
-  },
-  {
-    kicker: 'YOUR TEAM PAYS FOR LICENSES IT COULD BUILD',
-    title: 'Team training with the CDEV method',
-    text: 'I teach your team to build with AI: understand the service, give the AI the context, centralize the data. Then you stop buying what you can build.',
-    cta: 'Book a team session',
-    href: 'mailto:mariomanuel.pereravaldes@gmail.com?subject=Team%20training',
-  },
-];
+import { copy, langOf } from '../../data/i18n';
+
+const { doors, ui } = copy(langOf(Astro.currentLocale));
 ---
 
 <section id="work" class="wrap work">
   <div class="titles">
-    <p class="eyebrow">For companies</p>
-    <h2 class="section-title">Two ways to work with me</h2>
+    <p class="eyebrow">{ui.work.eyebrow}</p>
+    <h2 class="section-title">{ui.work.title}</h2>
   </div>
   <div class="grid">
     {
@@ -38,13 +25,10 @@ const doors = [
 
 <section class="about">
   <div class="wrap about-inner">
-    <img src="/favicon.svg" alt="The word SaaS struck through, Mario Perera's mark" width="132" height="132" />
+    <img src="/favicon.svg" alt={ui.about.markAlt} width="132" height="132" />
     <div class="about-copy">
-      <h2>I don't have superpowers. I grew up with AI.</h2>
-      <p>
-        I'm a software engineer, trained at CUJAE in Havana. You know your job and your business better than I do; I
-        know how to build with AI. I build in public: CDEV, Compiss and Baskion Innovation with my team.
-      </p>
+      <h2>{ui.about.title}</h2>
+      <p>{ui.about.text}</p>
     </div>
   </div>
 </section>

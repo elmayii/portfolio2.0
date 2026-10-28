@@ -1,5 +1,6 @@
 ---
 import { site } from '../../data/site';
+import { copy, langOf } from '../../data/i18n';
 
 interface Props {
   id: string;
@@ -10,11 +11,13 @@ interface Props {
 }
 
 const { id, source, guide = false } = Astro.props;
-const button = Astro.props.button ?? (guide ? 'Enviármela' : 'Subscribe');
+const lang = guide ? 'es' : langOf(Astro.currentLocale);
 
 const msg = guide
   ? {
       label: 'Tu email',
+      placeholder: 'Tu email',
+      button: 'Enviármela',
       consent: 'Acepto recibir correos de Mario Perera. Puedes darte de baja cuando quieras.',
       email: 'Escribe un email válido.',
       noConsent: 'Marca la casilla para que pueda enviártela.',
@@ -26,19 +29,8 @@ const msg = guide
       sent: 'Te lo he enviado. Revisa tu correo (y la pestaña de promociones).',
       already: 'Ya te lo envié hoy. Revisa tu correo (y la pestaña de promociones).',
     }
-  : {
-      label: 'Your email',
-      consent: 'I agree to get emails from Mario Perera. Unsubscribe anytime.',
-      email: 'Enter a valid email address.',
-      noConsent: 'Tick the box so I can email you.',
-      wait: 'One moment: the human check is still loading. Try again.',
-      invalid: "That email doesn't look right. Check it and try again.",
-      forbidden: 'The human check failed. Try again.',
-      limited: 'Too many tries. Wait a minute and try again.',
-      failed: 'Something went wrong. Try again in a minute.',
-      sent: '',
-      already: '',
-    };
+  : copy(lang).ui.form;
+const button = Astro.props.button ?? msg.button;
 ---
 
 <form
@@ -48,6 +40,7 @@ const msg = guide
   data-lead={guide ? 'tiktok' : 'web'}
   data-api={`${site.apiUrl}/lead`}
   data-substack={guide ? undefined : site.substackUrl}
+  data-welcome={lang === 'es' ? '/es/welcome' : '/welcome'}
   data-msg={JSON.stringify(msg)}
   novalidate
 >
@@ -57,14 +50,14 @@ const msg = guide
       <path d="M3 7l9 6 9-6"></path>
     </svg>
     <label for={id} class="sr-only">{msg.label}</label>
-    <input id={id} name="email" type="email" autocomplete="email" placeholder={guide ? 'Tu email' : 'Enter your email'} required />
+    <input id={id} name="email" type="email" autocomplete="email" placeholder={msg.placeholder} required />
     <button type="submit" class="btn">{button}</button>
   </div>
   <label class="consent">
     <input type="checkbox" name="consent" required />
     <span>{msg.consent}</span>
   </label>
-  <div class="cf-turnstile" data-sitekey={site.turnstileSiteKey} data-theme="light" data-language={guide ? 'es' : 'en'}></div>
+  <div class="cf-turnstile" data-sitekey={site.turnstileSiteKey} data-theme="light" data-language={lang}></div>
   <p class="subscribe-error" role="alert" hidden></p>
   <p class="subscribe-done" role="status" hidden></p>
 </form>
@@ -240,7 +233,7 @@ const msg = guide
             tab.opener = null;
             tab.location.href = `${substack.replace(/\/$/, '')}/subscribe?email=${encodeURIComponent(email)}`;
           }
-          window.location.href = `/welcome?source=${encodeURIComponent(form.dataset.source ?? 'web')}`;
+          window.location.href = `${form.dataset.welcome}?source=${encodeURIComponent(form.dataset.source ?? 'web')}`;
           return;
         }
         done.textContent = sent ? msg.sent : msg.already;

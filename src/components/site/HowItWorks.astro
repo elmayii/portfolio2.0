@@ -1,15 +1,17 @@
 ---
-import { steps } from '../../data/site';
+import { copy, langOf } from '../../data/i18n';
+
+const { steps, ui } = copy(langOf(Astro.currentLocale));
 ---
 
 <section id="guides" class="band">
   <div class="wrap inner">
-    <h2 class="section-title">How the free guides work</h2>
+    <h2 class="section-title">{ui.guides.title}</h2>
     <ol>
       {
         steps.map((step, i) => (
           <li class:list={{ last: i === steps.length - 1 }}>
-            <span class="mono step">STEP {i + 1}</span>
+            <span class="mono step">{ui.guides.step} {i + 1}</span>
             <strong>{step.title}</strong>
             <span>{step.text}</span>
           </li>

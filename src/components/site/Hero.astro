@@ -1,7 +1,10 @@
 ---
 import SiteHeader from './SiteHeader.astro';
 import SubscribeForm from './SubscribeForm.astro';
-import { site } from '../../data/site';
+import { copy, langOf } from '../../data/i18n';
+
+const { site, ui } = copy(langOf(Astro.currentLocale));
+const t = ui.hero;
 ---
 
 <div class="hero-shell">
@@ -11,19 +14,17 @@ import { site } from '../../data/site';
     <div class="copy">
       <div class="byline">
         <img class="avatar" src="/partner-mario-perera.jpg" alt="Mario Perera" width="200" height="200" />
-        <p class="kicker"><span aria-hidden="true"></span>Free newsletter · weekly builds</p>
+        <p class="kicker"><span aria-hidden="true"></span>{t.kicker}</p>
       </div>
       <h1>
-        Welcome to the<br />
+        {t.welcome}<br />
         <span class="accent"><span class="strike">SaaS</span>-Killing World.</span>
       </h1>
-      <p class="lede">
-        I rebuild the apps you pay for every month with AI and show you exactly how. What worked, what didn't. Free.
-      </p>
+      <p class="lede">{t.lede}</p>
       <div id="join">
         <SubscribeForm id="hero-email" source="hero" />
       </div>
-      {site.readers && <p class="count"><strong>{site.readers}</strong> readers · free, no spam</p>}
+      {site.readers && <p class="count"><strong>{site.readers}</strong> {t.readers}</p>}
     </div>
 
     <!-- ponytail: the 1px source keeps phones from downloading the 390KB photo they never show. -->
@@ -31,7 +32,7 @@ import { site } from '../../data/site';
       <source media="(max-width: 760px)" srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" />
       <img
         src="/HeroImage.jpg"
-        alt="Mario Perera presenting in front of a screen"
+        alt={t.photoAlt}
         width="1706"
         height="2560"
         fetchpriority="high"

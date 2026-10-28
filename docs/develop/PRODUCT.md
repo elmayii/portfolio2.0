@@ -33,7 +33,7 @@ ABSENT areas produce open questions, never batches — inventing them is forbidd
 | `/r/playbook` guide | Removed (2026-10-28) | DECISIONS 2026-10-27: PLAYBOOK discarded; 301 to `/` | — |
 | Toolchain: Astro 7 upgrade + type gate | DEFINED | Gate audit, DECISIONS 2026-10-17 | — |
 | Launch placeholders (`[brackets]`, `#` links) | PARTIAL | README "Before launch", `site.ts` | Real URLs for TikTok, X, Substack; next episode title; next pack name + line; "RADAR #1" target link |
-| Spanish version | PARTIAL | README "Spanish version by browser language" | Routing: `/es/` with Astro i18n, or runtime detection by browser language? Who writes or approves the Spanish copy? |
+| Spanish version | DEFINED | README "Spanish version by browser language"; DECISIONS 2026-10-27/28 | `/es/` + `/es/welcome` built (Sprint 02 / Batch 02); Spanish copy pending Mario's review on the preview (Batch 06). |
 | Capture API (`api/`, Worker `srperera-api`) | DEFINED | Contract `sb-01-01`, Batch 04 report | Deploys stay human-run |
 | Legacy React portfolio cleanup | PARTIAL — gated | README ("still in `src/components/` but no longer used") | Delete `*.tsx`, `Canvas/`, `hooks/`, `Welcome.astro`, `src/assets/`, `@astrojs/react`, React, framer-motion, react-icons, `tailwind.config.js`? Keep the old CV PDF? |
 | Stripe checkout (`/welcome` plans, vault card) | ABSENT | README one line | Payment Links or Checkout? The real URLs; is the intro price an automatic coupon? |

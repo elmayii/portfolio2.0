@@ -18,13 +18,14 @@ npm run preview    # serve dist/ locally
 | --- | --- |
 | `/` | Home: hero, how the free guides work, series, latest (from `GET /posts`), builds, work with me |
 | `/welcome` | Shown after the email form: confirmation |
+| `/es/`, `/es/welcome` | Spanish twins of `/` and `/welcome` (same pages, copy from `src/data/site.es.ts`). A Spanish browser is sent to `/es/` on its first visit; the header `ES`/`EN` switch stores the choice, which wins |
 | `/guia/<palabra>` | Spanish keyword guide form (noindex): one static page, served for every keyword by a rewrite in `public/_redirects` |
 | `/r/<palabra>` | Redirect to the guide's Substack post: one line per guide in `public/_redirects` (`/r/playbook` → `/`, 301) |
-| any other path | `404.html` with HTTP 404 (Pages): "Este post no existe" under `/r/`, "Page not found" elsewhere |
+| any other path | `404.html` with HTTP 404 (Pages): "Este post no existe" under `/r/`, "Página no encontrada" under `/es/`, "Page not found" elsewhere |
 
 The Vault section and the member offer are hidden until the vault exists (components kept in `src/components/site/`).
 
-Copy, links and prices live in `src/data/site.ts`. Components are in `src/components/site/`.
+Copy, links and prices live in `src/data/site.ts`; the Spanish copy in `src/data/site.es.ts` (same shape). Components are in `src/components/site/`.
 
 ## Environment
 
@@ -42,6 +43,6 @@ Copy, links and prices live in `src/data/site.ts`. Components are in `src/compon
 - [x] Email form posts to `https://api.srperera.com/lead` (Turnstile + consent); Latest reads the Worker's `GET /posts`
 - [ ] Stripe checkout links on `/welcome` and the vault card (vault hidden for now)
 - [ ] PostHog with UTM capture and the event list from the plan
-- [ ] Spanish version by browser language
+- [x] Spanish version by browser language (`/es/`; Mario reviews the Spanish copy on the preview before publishing)
 
 The previous portfolio components (React) are still in `src/components/` but no longer used by any page.

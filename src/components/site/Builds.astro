@@ -1,15 +1,18 @@
 ---
-import { builds } from '../../data/site';
+import { copy, langOf } from '../../data/i18n';
+
+const { builds, ui } = copy(langOf(Astro.currentLocale));
+const t = ui.builds;
 ---
 
 <section id="built" class="band">
   <div class="wrap inner">
     <div class="head">
       <div class="titles">
-        <p class="eyebrow">Proof</p>
-        <h2 class="section-title">Things I've built</h2>
+        <p class="eyebrow">{t.eyebrow}</p>
+        <h2 class="section-title">{t.title}</h2>
       </div>
-      <a class="link-arrow" href="https://github.com/elmayii">See my GitHub →</a>
+      <a class="link-arrow" href="https://github.com/elmayii">{t.github}</a>
     </div>
 
     <div class="grid">
@@ -35,7 +38,7 @@ import { builds } from '../../data/site';
       }
     </div>
 
-    <p class="also">Also: the Holnix app for Shopify, my AutoML thesis, CDEV (agentic development, in the open) and Compiss.</p>
+    <p class="also">{t.also}</p>
   </div>
 </section>
 

@@ -2,6 +2,24 @@
 
 > Append decisions as they are made. Format: date — decision — rationale.
 
+- 2026-10-28 — Spanish version, details the plan leaves open (agent, reversible; Sprint 02 / Batch 02):
+  `/es/` and `/es/welcome/` are two-line pages that render `../index.astro` / `../welcome.astro`, and every
+  component picks its copy by `Astro.currentLocale` through `src/data/i18n.ts` (`copy(lang)`), so both
+  languages share one markup. Copy that sat in components (hero, section titles, receipt, work doors,
+  about, welcome, web-form messages) moved into `site.ts` as `ui` and `doors`; `site.es.ts` mirrors every
+  export (typed `typeof en.<export>`; links, images and prices are spread from `site.ts`). The language
+  switch is `ES`/`EN` in the header, visible at every width (phone spacing tightened so it fits on one
+  line at 375px), stored in `localStorage.lang`. The inline head script runs only on pages with a twin
+  (`/`, `/welcome/`): stored choice wins in both directions; without one, only a browser whose first
+  `navigator.languages` entry starts with `es` is sent to `/es/` — an English browser opening `/es/` stays.
+  Query and hash are kept (`/welcome/?source=` survives). The Spanish web form lands on
+  `/es/welcome?source=`; `source` values and the API call are unchanged. `hreflang` en/es/x-default and
+  `og:locale:alternate` only on twinned pages; the sitemap gets the alternates from `@astrojs/sitemap`'s
+  `i18n` option (no new dependency). The 404 stays one file: unknown `/es/…` paths get Spanish text and a
+  `/es/` link, but the header and footer stay English there. Series names (`SaaS Kill #N`, `Don't pay for
+  this`, `Boring Apps #N`, `AI Money Radar`), `Growth Partner`, `PLAYBOOK` and prices are not translated
+  (names are human-only values); Mario reviews the Spanish on the preview (Batch 06).
+
 - 2026-10-28 — **Unknown `/r/<palabra>` shows a custom 404 "Este post no existe"** with HTTP 404 and a
   link home; `/welcome` tells web sign-ups to confirm in the Substack tab (a web sign-up has no
   keyword, so no guide email). — Human, relayed by the workspace coordinator (Mario: «tiene que

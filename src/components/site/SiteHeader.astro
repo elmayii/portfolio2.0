@@ -1,24 +1,38 @@
 ---
+import { alternates, copy, langOf, type Lang } from '../../data/i18n';
+
 interface Props {
   home?: boolean;
+  lang?: Lang; // pages outside /es/ that are Spanish (/guia)
 }
 
-const { home = false } = Astro.props;
-const base = home ? '' : '/';
+const { home = false, lang = langOf(Astro.currentLocale) } = Astro.props;
+const root = lang === 'es' ? '/es/' : '/';
+const base = home ? '' : root;
+const { header: t } = copy(lang).ui;
+const alt = alternates(Astro.url.pathname);
+const other = lang === 'es' ? 'en' : 'es';
 ---
 
 <header class:list={['site-header', { solid: !home }]}>
   <div class="wrap bar">
-    <a href="/" class="brand" aria-label="Mario Perera, home">
+    <a href={root} class="brand" aria-label={t.home}>
       <img src="/brand-mark.svg" alt="" width="73" height="22" />
       <span class="name">Mario Perera</span>
       <span class="handle">sr_perera</span>
     </a>
-    <nav aria-label="Main">
-      <a class="navlink" href={`${base}#read`}>Read</a>
-      <a class="navlink" href={`${base}#built`}>Builds</a>
-      <a class="navlink strong" href={`${base}#work`}>Work with me</a>
-      <a class="btn subscribe-btn" href={`${base}#join`}>Subscribe</a>
+    <nav aria-label={t.nav}>
+      <a class="navlink" href={`${base}#read`}>{t.read}</a>
+      <a class="navlink" href={`${base}#built`}>{t.builds}</a>
+      <a class="navlink strong" href={`${base}#work`}>{t.work}</a>
+      {
+        alt && (
+          <a class="lang-switch" href={alt[other]} hreflang={other} lang={other} aria-label={t.switchName} data-lang-switch={other}>
+            {t.switch}
+          </a>
+        )
+      }
+      <a class="btn subscribe-btn" href={`${base}#join`}>{t.subscribe}</a>
     </nav>
   </div>
 </header>
@@ -92,6 +106,16 @@ const base = home ? '' : '/';
     font-weight: 600;
   }
 
+  .lang-switch {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-decoration: none;
+    color: var(--ink);
+    padding: 12px 4px;
+  }
+
   .subscribe-btn {
     height: 44px;
     padding: 0 18px;
@@ -105,10 +129,31 @@ const base = home ? '' : '/';
     .handle {
       display: none;
     }
+
+    nav {
+      gap: 8px 14px;
+    }
   }
 
   /* Keep the wordmark, name and Subscribe on one line on phones */
   @media (max-width: 440px) {
+    /* Room for the language switch: wordmark, switch and Subscribe stay on one line at 375px. */
+    .bar {
+      gap: 8px;
+    }
+
+    nav {
+      gap: 8px 10px;
+    }
+
+    .lang-switch {
+      padding: 12px 0;
+    }
+
+    .subscribe-btn {
+      padding: 0 12px;
+    }
+
     .brand {
       gap: 10px;
     }
@@ -136,3 +181,16 @@ const base = home ? '' : '/';
     }
   }
 </style>
+
+<script>
+  // The chosen language wins over browser detection (the head script in Layout.astro reads it).
+  document.querySelectorAll<HTMLAnchorElement>('[data-lang-switch]').forEach((a) =>
+    a.addEventListener('click', () => {
+      try {
+        localStorage.setItem('lang', a.dataset.langSwitch!);
+      } catch {
+        // Storage blocked: the link still opens the other language.
+      }
+    }),
+  );
+</script>

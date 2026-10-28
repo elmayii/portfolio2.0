@@ -1,10 +1,14 @@
 ---
 import { socials } from '../../data/site';
+import { copy, langOf, type Lang } from '../../data/i18n';
+
+const { lang = langOf(Astro.currentLocale) } = Astro.props as { lang?: Lang };
+const t = copy(lang).ui.footer;
 ---
 
 <footer>
   <div class="wrap bar">
-    <nav aria-label="Social">
+    <nav aria-label={t.nav}>
       {socials.map((s) => <a href={s.url} rel={s.url.startsWith('http') ? 'me noopener' : undefined}>{s.name}</a>)}
     </nav>
     <span class="mono">© {new Date().getFullYear()} Mario Perera</span>

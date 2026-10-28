@@ -41,7 +41,9 @@ package manager: **npm** (`package-lock.json`).
   No adapter, no API routes, no SSR. The API is the separate Worker in `api/` (`api.srperera.com`).
 - **Copy lives in data, not components:** `src/data/site.ts` exports `site`, `socials`,
   `steps`, `series`, `builds`, `packs`, `checkout`, `pricing` (Latest comes from the Worker's
-  `GET /posts` at runtime). A text change edits `site.ts`;
+  `GET /posts` at runtime), plus `ui` and `doors` (interface copy). `src/data/site.es.ts` mirrors every
+  export in Spanish for `/es/` (`src/data/i18n.ts` picks one by `Astro.currentLocale`). A text change
+  edits `site.ts` and `site.es.ts`;
   components only render it. Page-local data (FAQ, playbook prompts) sits in the page
   frontmatter.
 - **Components:** `src/components/site/*.astro`. Zero hydration: there is no `client:` directive

@@ -1,24 +1,27 @@
 ---
 import '../styles/global.css';
-import { site, socials } from '../data/site';
+import { socials } from '../data/site';
+import { alternates, copy, langOf, type Lang } from '../data/i18n';
 
 interface Props {
   title?: string;
   description?: string;
   image?: string;
   noindex?: boolean;
-  lang?: 'en' | 'es';
+  lang?: Lang;
 }
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 
+const { lang = langOf(Astro.currentLocale) } = Astro.props;
+const { site } = copy(lang);
 const {
   title = site.title,
   description = site.description,
   image = '/images/mario-portrait-bw.jpg',
   noindex = false,
-  lang = 'en',
 } = Astro.props;
+const alt = alternates(Astro.url.pathname);
 
 const ogImage = new URL(image, Astro.site);
 
@@ -59,6 +62,26 @@ const person = {
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Mario Perera" />
     <meta property="og:locale" content={lang === 'es' ? 'es_ES' : 'en_US'} />
+    {alt && <meta property="og:locale:alternate" content={lang === 'es' ? 'en_US' : 'es_ES'} />}
+    {
+      alt && (
+        <>
+          <link rel="alternate" hreflang="en" href={new URL(alt.en, Astro.site)} />
+          <link rel="alternate" hreflang="es" href={new URL(alt.es, Astro.site)} />
+          <link rel="alternate" hreflang="x-default" href={new URL(alt.en, Astro.site)} />
+          {/* First visit: a Spanish browser goes to /es/. A choice stored by the language switch wins either way. */}
+          <script is:inline define:vars={{ lang, twin: lang === 'es' ? alt.en : alt.es }}>
+            var stored;
+            try {
+              stored = localStorage.getItem('lang');
+            } catch (e) {}
+            var first = (navigator.languages && navigator.languages[0]) || navigator.language || '';
+            var want = stored || (/^es/i.test(first) ? 'es' : '');
+            if ((want === 'es' || want === 'en') && want !== lang) location.replace(twin + location.search + location.hash);
+          </script>
+        </>
+      )
+    }
 
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />

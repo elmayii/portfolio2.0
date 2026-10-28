@@ -3,6 +3,63 @@
 > Handoff log. One entry per meaningful step, **newest first** (the ordering is declared in the
 > protocol; never mix orderings). Do not exaggerate progress.
 
+## 2026-10-28 — Sprint 02 / Batch 02 — Spanish version (SYS-01-B02)
+
+Status: DONE (branch `cdev/sprint-02-batch-02`, cut from `cdev/sprint-02-batch-05` @ `9f534aa`)
+
+Completed:
+- Astro i18n (`en` default at the root, `es` under `/es/`); `/es/` and `/es/welcome/` render the same
+  pages as `/` and `/welcome/`, copy picked by `Astro.currentLocale` via `src/data/i18n.ts`.
+- Component copy moved into `src/data/site.ts` (`ui`, `doors`); `src/data/site.es.ts` mirrors every export
+  in Spanish (translation of the approved English copy, no new claims; names and prices untouched).
+- Head: `lang`, `og:locale` (+ `og:locale:alternate`), `hreflang` en/es/x-default on twinned pages; first-visit
+  inline script (Spanish browser → `/es/…`, stored choice wins both ways, query/hash kept).
+- Header `ES`/`EN` switch (stores `localStorage.lang`), visible at every width; phone spacing tightened.
+- `/guia/<palabra>` header and footer now Spanish (links to `/es/`); 404 shows "Página no encontrada" + `/es/`
+  link under `/es/…`, keeps "Este post no existe" under `/r/` and HTTP 404.
+- Spanish web form: Spanish label, placeholder, button, consent and errors; Turnstile `data-language="es"`;
+  lands on `/es/welcome?source=<source>`; `source` values and the API call unchanged.
+- Sitemap: `/` and `/es/` with `xhtml:link` alternates; `/welcome`, `/es/welcome`, `/guia`, 404 out.
+- Docs: README routes + Before launch, DECISIONS, PRODUCT, protocol rule 9, AGENTS.md copy bullet.
+
+Verification:
+- `npm run check`: pass (0 errors, 0 warnings, 13 hints — all in legacy `src/components/*.tsx`).
+- `npm run build`: pass (6 pages; sitemap created, no integration error).
+- Route parity EN/ES: pass — DOM skeleton of `/` vs `/es/` identical (158 elements), `/welcome/` vs
+  `/es/welcome/` identical (30); no English UI string left in the Spanish HTML (grep).
+- EN regression: pass — visible text of `/`, `/welcome`, `/404`, `/guia` diffed against a build of `9f534aa`:
+  only the added switch, the head script and the intended `/guia` header/footer and 404 changes differ.
+- Language detection (Playwright, `npx wrangler@4 pages dev dist`): pass — `es-ES` browser: `/` → `/es/`,
+  `/welcome/?source=hero` → `/es/welcome/?source=hero`, `/guia/prueba` stays; `en-US` browser: `/` stays,
+  `/es/` stays (no bounce).
+- Language switch at 1280 and 375: pass — `/es/` → `/` stores `en`, then `/es/` → `/`; `/` → `/es/` stores
+  `es`, then `/` → `/es/`. Header (wordmark, switch, Subscribe/Suscríbete) on one line at 375–1280 in both
+  languages, no horizontal scroll; at 340px it wraps (as `/guia`, without switch, does).
+- Spanish form at 375: pass — invalid → "Escribe un email válido."; no consent → "Marca la casilla para que
+  pueda escribirte."; valid (`/lead` stubbed 200, test Turnstile key) → `/es/welcome/?source=hero`,
+  `optin_email` stored, Substack tab `…/subscribe?email=…`.
+- Latest on `/es/` (`/posts` stubbed): pass — date `27 OCT 2026`, CTA "Leer →".
+- Sitemap: pass — `dist/sitemap-0.xml` = `/` and `/es/`, each with en/es `xhtml:link`.
+- hreflang/lang/og:locale (built HTML): pass — `/`, `/es/`, `/welcome/`, `/es/welcome/` carry en/es/x-default
+  matching the canonical (trailing slash); `/guia` `lang="es"`, no hreflang; 404 no hreflang.
+- `_redirects`/404 via pages dev: pass — `/`, `/es/`, `/welcome/`, `/es/welcome/`, `/guia/prueba` 200; `/es`,
+  `/welcome`, `/es/welcome` 308 to the slash form (query kept); `/r/playbook` 301 → `/`; `/r/nope`, `/es/nope`,
+  `/nope`, `/es/guia/x` 404 with "Este post no existe" / "Página no encontrada" / "Page not found".
+- Console: no errors except the expected 404 document loads on the 404 checks; no warnings.
+- Evidence: `logs/evidence/02-02/` — `{home,welcome}-{en,es}-{1280,375}.png`, `guia-*`, `404-{en,es,post}-*`,
+  `form-es-error-375.png`, `welcome-es-after-form-375.png`, `switch-to-en-375.png`, `switch-to-es-1280.png`.
+
+Not run: the real `/lead` with the Spanish form (stubbed 200; the API path is unchanged since Batch 05).
+
+Open questions for Mario (review on the preview, Batch 06 gate):
+- Spanish copy as a whole, especially "Bienvenido al SaaS-Killing World" (gendered), eyebrows "Pruebas" and
+  "Suscripción", and "Growth Partner con Baskion".
+- Series names stay English (`SaaS Kill #N`, `Don't pay for this`, `Boring Apps #N`, `AI Money Radar`):
+  translate any of them for `/es/`?
+- On the 404 under `/es/…` the header and footer stay English (one 404 file for every language).
+
+Next: Batch 06 (Mario's review of the Spanish preview, then publish).
+
 ## 2026-10-28 — Sprint 02 / Batch 05 — closed: live `GET /posts` (SYS-01-B02)
 
 Status: DONE
