@@ -3,6 +3,44 @@
 > Handoff log. One entry per meaningful step, **newest first** (the ordering is declared in the
 > protocol; never mix orderings). Do not exaggerate progress.
 
+## 2026-10-28 — Sprint 02 / Batch 01 — Fill launch placeholders (SYS-01-B02)
+
+Status: DONE
+
+Completed:
+- `site.ts` socials from contract `sb-01-02` (panel's real DB): TikTok, LinkedIn (panel URL
+  replaces the old one), X, Substack; Instagram and GitHub unchanged. `site.substackUrl` =
+  `https://srperera.substack.com` (`PUBLIC_SUBSTACK_URL` still overrides it). With it set, the
+  subscribe form now also opens `https://srperera.substack.com/subscribe?email=…`.
+- Hidden, not invented: reader count (`readers: ''`, hero line skipped), RADAR #1 and SAAS KILL #01
+  latest cards (`href: ''`, filtered), `[NEXT PACK]` (empty key, filtered), the receipt's
+  `[Next app you pay for] $[XX].00` line (removed from `Series.astro`).
+- `/welcome`: Stripe links live in `site.ts` `checkout` (empty) and a plan without a link is not
+  rendered, so the paid plans are hidden until the links exist; "Subscribe there" →
+  `${site.substackUrl}/subscribe`. The rest of the offer stays for Batch 05 (Vault hiding).
+- Batch 04 report: Turnstile site key recorded (separate docs commit on `cdev/sprint-02-batch-04`).
+
+Verification:
+- `npm run check`: pass (0 errors, 0 warnings, 13 hints, none in touched files).
+- `npm run build`: pass (3 pages, sitemap created, no integration error).
+- L2 `sb-01-02` (`GET 127.0.0.1:4400/api/state` vs `site.ts`): pass — 5/5 socials + `substackUrl` identical.
+- Built HTML scan (`dist/**/*.html`): `href="#"` 0 on all 3 pages: pass. `[` in rendered text:
+  only the two series formulas (`Stop paying for [app]. Build it in [time].`, `[Service] charges
+  $X for [task]…`) — approved copy, fill-in templates, not placeholders.
+- JSON-LD `sameAs` in built HTML: the 6 http URLs (Instagram, TikTok, LinkedIn, X, Substack,
+  GitHub): pass. Footer links: same 6 on all pages: pass.
+- Playwright on `npm run preview` (`/` and `/welcome`) at 1280×800 and 375×812: no `#` links, no
+  horizontal scroll, latest shows only the PLAYBOOK card, packs PLAYBOOK + RADAR, no reader line,
+  no plans on `/welcome`; invalid email shows the error; valid email lands on
+  `/welcome?source=hero` and opens the Substack subscribe tab; console: no errors or warnings: pass.
+  Evidence: `logs/evidence/02-01/{home,welcome}-{1280,375}.png`.
+
+Known:
+- Preview binds to `[::1]:4321` only on this machine; Playwright used `http://[::1]:4321/`.
+
+Next:
+- Batch 05 (capture on the site): replaces the static `latest`, hides the Vault.
+
 ## 2026-10-27 — Sprint 02 re-planned for SYS-01-B02 (site on srperera.com)
 
 Status: PLANNED

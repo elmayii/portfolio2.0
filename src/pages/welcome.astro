@@ -2,7 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/site/SiteHeader.astro';
 import SiteFooter from '../components/site/SiteFooter.astro';
-import { pricing } from '../data/site';
+import { checkout, pricing, site } from '../data/site';
 
 const faqs = [
   {
@@ -60,28 +60,36 @@ const perks = [
           }
         </ul>
 
-        <div class="plans">
-          <a class="plan featured" href="#">
-            <span class="mono tag">MONTHLY · NEW READER OFFER</span>
-            <span class="price"
-              ><s>${pricing.monthly}</s><b>${pricing.intro}</b><span>/month</span></span
-            >
-            <span class="note">20% off your first 3 months, then ${pricing.monthly}/month.</span>
-            <span class="btn">Start monthly</span>
-          </a>
-          <a class="plan" href="#">
-            <span class="mono tag">ANNUAL · NEW READER OFFER</span>
-            <span class="price"
-              ><s>${pricing.yearly}</s><b>${pricing.yearlyIntro}</b><span>/year</span></span
-            >
-            <span class="note">20% off your first year, then ${pricing.yearly}/year.</span>
-            <span class="btn dark">Start annual</span>
-          </a>
-        </div>
+        {
+          (checkout.monthly || checkout.yearly) && (
+            <div class="plans">
+              {checkout.monthly && (
+                <a class="plan featured" href={checkout.monthly}>
+                  <span class="mono tag">MONTHLY · NEW READER OFFER</span>
+                  <span class="price"
+                    ><s>${pricing.monthly}</s><b>${pricing.intro}</b><span>/month</span></span
+                  >
+                  <span class="note">20% off your first 3 months, then ${pricing.monthly}/month.</span>
+                  <span class="btn">Start monthly</span>
+                </a>
+              )}
+              {checkout.yearly && (
+                <a class="plan" href={checkout.yearly}>
+                  <span class="mono tag">ANNUAL · NEW READER OFFER</span>
+                  <span class="price"
+                    ><s>${pricing.yearly}</s><b>${pricing.yearlyIntro}</b><span>/year</span></span
+                  >
+                  <span class="note">20% off your first year, then ${pricing.yearly}/year.</span>
+                  <span class="btn dark">Start annual</span>
+                </a>
+              )}
+            </div>
+          )
+        }
 
         <div class="fine">
           <span>Cancel anytime. Card receipt by email, easy to expense.</span>
-          <span>Prefer Substack? <a href="#">Subscribe there</a> at the full price.</span>
+          <span>Prefer Substack? <a href={`${site.substackUrl}/subscribe`}>Subscribe there</a> at the full price.</span>
         </div>
       </div>
     </section>

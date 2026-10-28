@@ -21,10 +21,6 @@ import { series, latest } from '../../data/site';
           <span class="blue">→ my own DM bot</span>
           <span class="blue num">$0.00</span>
         </div>
-        <div class="pair">
-          <span>[Next app you pay for]</span>
-          <span class="num">$[XX].00</span>
-        </div>
       </div>
       <div class="pair total">
         <span>NOW YOU PAY</span>
@@ -49,7 +45,7 @@ import { series, latest } from '../../data/site';
   <div class="latest">
     <h2 class="eyebrow">Latest</h2>
     {
-      latest.map((item) => (
+      latest.filter((item) => item.href).map((item) => (
         <a href={item.href} class="item">
           <span class="mono label">{item.label}</span>
           <span class="title">{item.title}</span>

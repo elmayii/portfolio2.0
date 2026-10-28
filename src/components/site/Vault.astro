@@ -13,7 +13,7 @@ import { packs, pricing } from '../../data/site';
       </p>
       <ul>
         {
-          packs.map((p) => (
+          packs.filter((p) => p.key).map((p) => (
             <li>
               <span class="mono key">{p.key}</span>
               <span>{p.text}</span>

@@ -1,5 +1,5 @@
 // Site copy and links in one place, so text changes don't touch the components.
-// Anything in [brackets] is a placeholder to fill before launch.
+// Anything in [brackets] is a placeholder to fill before launch; an empty value is not rendered.
 
 export const site = {
   name: 'Mario Perera',
@@ -8,17 +8,18 @@ export const site = {
   title: 'Mario Perera — Welcome to the SaaS-Killing World',
   description:
     'I rebuild the apps you pay for with AI and show you how. Free guides, a member vault your AI installs for you, and help for teams.',
-  readers: '+100',
-  // Set PUBLIC_SUBSTACK_URL (e.g. https://saaskillingworld.substack.com) to send sign-ups to Substack.
-  substackUrl: import.meta.env.PUBLIC_SUBSTACK_URL ?? '',
+  readers: '', // reader count not given yet: the hero line is hidden while empty
+  // Sign-ups also open Substack; PUBLIC_SUBSTACK_URL overrides it.
+  substackUrl: import.meta.env.PUBLIC_SUBSTACK_URL || 'https://srperera.substack.com',
 };
 
+// From the community panel (workspace contract sb-01-02); GitHub is not in the panel.
 export const socials = [
   { name: 'Instagram', url: 'https://www.instagram.com/sr_perera/' },
-  { name: 'TikTok', url: '#' },
-  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/mario-perera-b30921237/' },
-  { name: 'X', url: '#' },
-  { name: 'Substack', url: '#' },
+  { name: 'TikTok', url: 'https://www.tiktok.com/@sr_perera_' },
+  { name: 'LinkedIn', url: 'https://www.linkedin.com/in/mario-sr-perera-b30921237' },
+  { name: 'X', url: 'https://x.com/mariosrperera' },
+  { name: 'Substack', url: 'https://srperera.substack.com' },
   { name: 'GitHub', url: 'https://github.com/elmayii' },
 ];
 
@@ -60,15 +61,16 @@ export const series = [
   },
 ];
 
+// Cards without an href are not rendered.
 export const latest = [
-  { label: 'RADAR #1', title: '$320K+ in cash prizes for AI builders, open this month', cta: 'Read', href: '#' },
+  { label: 'RADAR #1', title: '$320K+ in cash prizes for AI builders, open this month', cta: 'Read', href: '' },
   {
     label: 'FREE GUIDE',
     title: 'PLAYBOOK: 3 prompts that pick the right sales playbook for every lead',
     cta: 'Get it',
     href: '/r/playbook',
   },
-  { label: 'SAAS KILL #01', title: '[Next episode title]', cta: 'Soon', href: '#' },
+  { label: 'SAAS KILL #01', title: '[Next episode title]', cta: 'Soon', href: '' },
 ];
 
 export const builds = [
@@ -98,11 +100,15 @@ export const builds = [
   },
 ];
 
+// Packs with an empty key are not rendered.
 export const packs = [
   { key: 'PLAYBOOK', text: 'Lead sheet, router, drafter and call follow-ups' },
   { key: 'RADAR', text: 'The daily search task that finds open prize money' },
-  { key: '[NEXT PACK]', text: '[One line on what it builds]' },
+  { key: '', text: '[One line on what it builds]' }, // [NEXT PACK]
 ];
+
+// Stripe payment links for /welcome; a plan without a link is not rendered.
+export const checkout = { monthly: '', yearly: '' };
 
 export const pricing = {
   intro: 12,

@@ -23,7 +23,7 @@ import { site } from '../../data/site';
       <div id="join">
         <SubscribeForm id="hero-email" source="hero" />
       </div>
-      <p class="count"><strong>{site.readers}</strong> readers · free, no spam</p>
+      {site.readers && <p class="count"><strong>{site.readers}</strong> readers · free, no spam</p>}
     </div>
 
     <!-- ponytail: the 1px source keeps phones from downloading the 390KB photo they never show. -->

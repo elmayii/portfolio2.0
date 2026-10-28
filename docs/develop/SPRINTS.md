@@ -83,7 +83,7 @@ PRODUCT.md and stay open questions until their inputs exist.
 
 ### Batch 01 — Fill launch placeholders
 
-Status: PENDING
+Status: DONE (2026-10-28)
 
 System Reference: SYS-01-B02 (contract: workspace `workspace/contracts/sb-01-02.md`).
 
