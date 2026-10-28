@@ -1,0 +1,64 @@
+---
+// One static page for every keyword: public/_redirects rewrites /guia/<palabra> here (status 200), so a new
+// keyword needs no rebuild. The keyword is read from the address bar. Spanish only (DECISIONS 2026-10-27).
+import Layout from '../../layouts/Layout.astro';
+import SiteHeader from '../../components/site/SiteHeader.astro';
+import SiteFooter from '../../components/site/SiteFooter.astro';
+import SubscribeForm from '../../components/site/SubscribeForm.astro';
+---
+
+<Layout title="Tu guía gratis · Mario Perera" description="Déjame tu email y te envío la guía." lang="es" noindex>
+  <SiteHeader />
+  <main class="wrap guide">
+    <p class="eyebrow">Guía gratis</p>
+    <h1>Tu guía<span data-keyword></span></h1>
+    <p class="lede">Déjame tu email y te la envío ahora mismo.</p>
+    <SubscribeForm id="guide-email" source="tiktok" guide />
+    <p class="missing" hidden>A este enlace le falta la palabra de la guía. Vuelve al vídeo y ábrelo otra vez.</p>
+  </main>
+  <SiteFooter />
+</Layout>
+
+<style>
+  .guide {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-top: 72px;
+    padding-bottom: 96px;
+  }
+
+  h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+
+  .lede,
+  .missing {
+    margin: 0;
+    max-width: 46ch;
+    font-size: 20px;
+    color: var(--body);
+  }
+</style>
+
+<script>
+  // Same rule as the Worker's keyword ([a-z0-9-], 1-64): anything else is treated as missing.
+  const keyword = decodeURIComponent(location.pathname.split('/')[2] ?? '')
+    .trim()
+    .toLowerCase();
+  const form = document.querySelector<HTMLFormElement>('form[data-subscribe]');
+  if (/^[a-z0-9-]{1,64}$/.test(keyword) && form) {
+    form.dataset.keyword = keyword;
+    document.querySelector('[data-keyword]')!.textContent = `: ${keyword}`;
+    document.title = `Tu guía: ${keyword} · Mario Perera`;
+  } else {
+    form?.remove();
+    document.querySelector<HTMLElement>('.missing')!.hidden = false;
+  }
+</script>

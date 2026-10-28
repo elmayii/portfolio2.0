@@ -14,6 +14,6 @@ export default defineConfig({
     plugins: [tailwindcss()]
   },
 
-  // /welcome is noindex, so it stays out of the sitemap.
-  integrations: [react(), sitemap({ filter: (page) => !page.includes('/welcome') })]
+  // /welcome and /guia are noindex, so they stay out of the sitemap.
+  integrations: [react(), sitemap({ filter: (page) => !page.includes('/welcome') && !page.includes('/guia') })]
 });

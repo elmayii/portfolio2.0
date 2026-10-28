@@ -180,7 +180,9 @@ Acceptance:
 
 ### Batch 05 — Capture on the site
 
-Status: PENDING
+Status: BLOCKED (2026-10-28) — all code and local evidence done; the only open acceptance item is the
+live `GET /posts`. Unblocks with: the human's OK to redeploy the Worker (`npx wrangler@4 deploy` in
+`api/`), then `curl https://api.srperera.com/posts` and the Latest section on the preview.
 
 System Reference: SYS-01-B02 (contracts: workspace `sb-01-01` and `sb-01-02`).
 

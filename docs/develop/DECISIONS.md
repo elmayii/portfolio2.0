@@ -2,6 +2,25 @@
 
 > Append decisions as they are made. Format: date — decision — rationale.
 
+- 2026-10-28 — Capture on the site, details the plan leaves open (agent, reversible; Sprint 02 / Batch 05):
+  the form opens a blank tab **inside the click** and sends it to Substack only after `200` (closed on
+  any failure), so popup blockers (Safari) do not drop the Substack step that opening after an `await`
+  would lose; `/guia/<palabra>` is `src/pages/guia/index.astro` behind `/guia/:palabra /guia/ 200`,
+  the keyword is read from the address bar with the Worker's rule (`[a-z0-9-]{1,64}`), and a missing or
+  malformed keyword removes the form with a message; `sent:false` there reads "ya te lo envié hoy";
+  `site.apiUrl` holds `https://api.srperera.com`; the Turnstile site key lives in `site.ts` with a
+  `PUBLIC_TURNSTILE_SITE_KEY` override for local previews (always-pass test key); `GET /posts` caches
+  successful answers 15 min with the Cache API (`caches.open('posts')`, failures not cached), other
+  methods 405; the Latest section stays hidden when `/posts` is empty or unreachable; `/welcome`'s
+  "No thanks, I'll stay free" became "Back to the home page" and the meta description lost the vault
+  phrase (Vault hidden); `/guia` is out of the sitemap (noindex). `Layout.astro` gained a `lang` prop
+  (`og:locale` follows) for the Spanish page — Batch 02 builds on it.
+- 2026-10-28 — Local evidence for `_redirects` uses `npx wrangler@4 pages dev dist` (`astro preview`
+  ignores `_redirects`); the Worker is served with `npx wrangler@4 dev --local --var ...` (no `.dev.vars`
+  file). Because the Worker only allows the `https://srperera.com` origin, Playwright routes
+  `api.srperera.com` server-side: `/posts` to the local Worker, `/lead` to the real API (unchanged
+  answer, CORS header added). The 200/400/429 client branches are exercised with labelled stubs.
+
 - 2026-10-27 — **Guides live in Substack as "Subscribers only" posts** (free subscribers included):
   Substack shows the start and asks for the email to keep reading, which subscribes the reader.
   The site lists the 3 newest posts through the Worker (`GET /posts`, Substack's archive JSON —

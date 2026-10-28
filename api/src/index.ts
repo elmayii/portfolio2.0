@@ -1,7 +1,8 @@
 // srperera-api — POST https://api.srperera.com/lead for ManyChat (X-Lead-Secret), the TikTok guide page and the
-// site's subscribe form (Turnstile + per-IP limit). Contract: workspace workspace/contracts/sb-01-01.md.
+// site's subscribe form (Turnstile + per-IP limit); GET /posts for the site's Latest section.
+// Contract: workspace workspace/contracts/sb-01-01.md.
 // Pure logic lives in lead.ts (tested by lead.test.ts: `node --test "api/**/*.test.ts"`).
-import { guideEmail, parseLead, underDailyCap } from './lead.ts';
+import { guideEmail, parseLead, toPosts, underDailyCap } from './lead.ts';
 
 const FROM = { email: 'guides@mail.srperera.com', name: 'Mario Perera' };
 const REPLY_TO = 'hello@srperera.com';
@@ -38,8 +39,30 @@ async function turnstileOk(token: string, ip: string, env: Env): Promise<boolean
   }
 }
 
+// The RSS feed leaves out subscriber-only posts (where the guides live), so the archive JSON is read instead.
+const ARCHIVE = 'https://srperera.substack.com/api/v1/archive?sort=new&limit=3';
+
+async function posts(): Promise<Response> {
+  const cache = await caches.open('posts');
+  const hit = await cache.match(ARCHIVE);
+  if (hit) return new Response(hit.body, hit); // fresh copy: the CORS header is added after
+  try {
+    const r = await fetch(ARCHIVE, { signal: AbortSignal.timeout(5_000) });
+    if (!r.ok) throw new Error(String(r.status));
+    const res = Response.json(toPosts(await r.json()), { headers: { 'Cache-Control': 'public, max-age=900' } });
+    await cache.put(ARCHIVE, res.clone()); // 15 min (max-age); failures below are not cached
+    return res;
+  } catch (e) {
+    console.error('posts_failed', (e as Error).message);
+    return Response.json([]);
+  }
+}
+
 async function handle(request: Request, env: Env): Promise<Response> {
-  if (new URL(request.url).pathname !== '/lead') return new Response(null, { status: 404 });
+  const path = new URL(request.url).pathname;
+  if (path === '/posts')
+    return request.method === 'GET' ? posts() : new Response(null, { status: 405, headers: { Allow: 'GET' } });
+  if (path !== '/lead') return new Response(null, { status: 404 });
   if (request.method === 'OPTIONS')
     return new Response(null, {
       status: 204,

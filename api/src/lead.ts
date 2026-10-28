@@ -1,4 +1,4 @@
-// Pure logic of POST /api/lead (no Workers APIs), shared by index.ts and lead.test.ts.
+// Pure logic of POST /lead and GET /posts (no Workers APIs), shared by index.ts and lead.test.ts.
 // Kept out of index.ts because workerd treats every named export of the main module as an entrypoint.
 
 export type Source = 'instagram' | 'tiktok' | 'web';
@@ -75,4 +75,28 @@ export function guideEmail(keyword: string): { subject: string; text: string; ht
 <p style="font-size:12px;color:#666666">Responde a este correo para darte de baja o borrar tus datos.</p>
 </body></html>`;
   return { subject: `Tu guía: ${keyword}`, text, html };
+}
+
+export interface Post {
+  title: string;
+  subtitle: string;
+  url: string;
+  date: string;
+  cover: string | null;
+}
+
+/** Substack's archive JSON (undocumented) → the 3 newest posts; anything malformed is dropped. */
+export function toPosts(raw: unknown): Post[] {
+  if (!Array.isArray(raw)) return [];
+  const str = (v: unknown) => (typeof v === 'string' ? v : '');
+  return raw
+    .filter((p) => p && typeof p.title === 'string' && str(p.canonical_url).startsWith('https://'))
+    .slice(0, 3)
+    .map((p) => ({
+      title: p.title,
+      subtitle: str(p.subtitle),
+      url: p.canonical_url,
+      date: str(p.post_date),
+      cover: str(p.cover_image).startsWith('https://') ? p.cover_image : null,
+    }));
 }

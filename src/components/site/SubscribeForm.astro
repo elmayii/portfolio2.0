@@ -5,30 +5,84 @@ interface Props {
   id: string;
   source: string;
   button?: string;
+  // Spanish keyword guide (/guia/<palabra>): source tiktok, keyword set by the page, confirmation in place.
+  guide?: boolean;
 }
 
-const { id, source, button = 'Subscribe' } = Astro.props;
+const { id, source, guide = false } = Astro.props;
+const button = Astro.props.button ?? (guide ? 'Enviármela' : 'Subscribe');
+
+const msg = guide
+  ? {
+      label: 'Tu email',
+      consent: 'Acepto recibir correos de Mario Perera. Puedes darte de baja cuando quieras.',
+      email: 'Escribe un email válido.',
+      noConsent: 'Marca la casilla para que pueda enviártela.',
+      wait: 'Un momento: la verificación aún está cargando. Inténtalo de nuevo.',
+      invalid: 'Ese email no parece correcto. Revísalo e inténtalo de nuevo.',
+      forbidden: 'No se pudo verificar que eres humano. Inténtalo de nuevo.',
+      limited: 'Demasiados intentos. Espera un minuto y vuelve a probar.',
+      failed: 'Algo ha fallado. Inténtalo de nuevo en un minuto.',
+      sent: 'Te lo he enviado. Revisa tu correo (y la pestaña de promociones).',
+      already: 'Ya te lo envié hoy. Revisa tu correo (y la pestaña de promociones).',
+    }
+  : {
+      label: 'Your email',
+      consent: 'I agree to get emails from Mario Perera. Unsubscribe anytime.',
+      email: 'Enter a valid email address.',
+      noConsent: 'Tick the box so I can email you.',
+      wait: 'One moment: the human check is still loading. Try again.',
+      invalid: "That email doesn't look right. Check it and try again.",
+      forbidden: 'The human check failed. Try again.',
+      limited: 'Too many tries. Wait a minute and try again.',
+      failed: 'Something went wrong. Try again in a minute.',
+      sent: '',
+      already: '',
+    };
 ---
 
-<form class="subscribe" data-subscribe data-source={source} data-substack={site.substackUrl} novalidate>
-  <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="3" y="5" width="18" height="14" rx="2"></rect>
-    <path d="M3 7l9 6 9-6"></path>
-  </svg>
-  <label for={id} class="sr-only">Your email</label>
-  <input id={id} name="email" type="email" autocomplete="email" placeholder="Enter your email" required />
-  <button type="submit" class="btn">{button}</button>
-  <p class="subscribe-error" role="alert" hidden>Enter a valid email address.</p>
+<form
+  class="subscribe"
+  data-subscribe
+  data-source={source}
+  data-lead={guide ? 'tiktok' : 'web'}
+  data-api={`${site.apiUrl}/lead`}
+  data-substack={guide ? undefined : site.substackUrl}
+  data-msg={JSON.stringify(msg)}
+  novalidate
+>
+  <div class="row">
+    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+      <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+      <path d="M3 7l9 6 9-6"></path>
+    </svg>
+    <label for={id} class="sr-only">{msg.label}</label>
+    <input id={id} name="email" type="email" autocomplete="email" placeholder={guide ? 'Tu email' : 'Enter your email'} required />
+    <button type="submit" class="btn">{button}</button>
+  </div>
+  <label class="consent">
+    <input type="checkbox" name="consent" required />
+    <span>{msg.consent}</span>
+  </label>
+  <div class="cf-turnstile" data-sitekey={site.turnstileSiteKey} data-theme="light" data-language={guide ? 'es' : 'en'}></div>
+  <p class="subscribe-error" role="alert" hidden></p>
+  <p class="subscribe-done" role="status" hidden></p>
 </form>
+<script is:inline src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
 
 <style>
   .subscribe {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+    max-width: 560px;
+  }
+
+  .row {
     display: flex;
     align-items: center;
     gap: 10px;
-    width: 100%;
-    max-width: 560px;
     box-sizing: border-box;
     padding: 6px 6px 6px 18px;
     background: var(--paper);
@@ -38,7 +92,7 @@ const { id, source, button = 'Subscribe' } = Astro.props;
     color: var(--muted);
   }
 
-  .subscribe input {
+  .row input {
     flex: 1 1 auto;
     min-width: 0;
     height: 52px;
@@ -49,46 +103,105 @@ const { id, source, button = 'Subscribe' } = Astro.props;
     font-size: 17px;
   }
 
-  .subscribe input:focus-visible {
+  .row input:focus-visible {
     outline: none;
   }
 
-  .subscribe:focus-within {
+  .row:focus-within {
     border-color: var(--blue);
   }
 
-  .subscribe-error {
-    position: absolute;
-    left: 18px;
-    top: calc(100% + 8px);
+  .consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.45;
+    color: var(--muted);
+    cursor: pointer;
+  }
+
+  .consent input {
+    flex: none;
+    width: 18px;
+    height: 18px;
+    margin: 1px 0 0;
+    accent-color: var(--blue);
+  }
+
+  .cf-turnstile {
+    min-height: 65px;
+  }
+
+  .subscribe-error,
+  .subscribe-done {
     margin: 0;
     font-size: 14px;
+  }
+
+  .subscribe-error {
     color: #C2185B;
   }
 
+  .subscribe-done {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  /* After an in-place confirmation only the message stays. */
+  .subscribe[data-sent] > :not(.subscribe-done) {
+    display: none;
+  }
+
+  .btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+  }
+
   @media (max-width: 420px) {
-    .subscribe .btn {
+    .row .btn {
       padding: 0 16px;
     }
   }
 </style>
 
 <script>
+  // POST https://api.srperera.com/lead (workspace contract sb-01-01). Turnstile renders itself into .cf-turnstile
+  // and adds the hidden input cf-turnstile-response to the form; tokens are single use, so it is reset on failure.
   const EMAIL = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  type Turnstile = { reset(el: Element): void };
 
   document.querySelectorAll<HTMLFormElement>('form[data-subscribe]').forEach((form) => {
-    form.addEventListener('submit', (event) => {
+    const msg = JSON.parse(form.dataset.msg ?? '{}') as Record<string, string>;
+    const input = form.querySelector<HTMLInputElement>('input[type="email"]')!;
+    const consent = form.querySelector<HTMLInputElement>('input[name="consent"]')!;
+    const button = form.querySelector<HTMLButtonElement>('button')!;
+    const error = form.querySelector<HTMLElement>('.subscribe-error')!;
+    const done = form.querySelector<HTMLElement>('.subscribe-done')!;
+    const say = (text: string) => {
+      error.textContent = text;
+      error.hidden = false;
+    };
+
+    form.addEventListener('submit', async (event) => {
       event.preventDefault();
-      const input = form.querySelector<HTMLInputElement>('input[type="email"]');
-      const error = form.querySelector<HTMLElement>('.subscribe-error');
-      const email = input?.value.trim() ?? '';
+      if (button.disabled) return;
+      const email = input.value.trim();
+      const token = String(new FormData(form).get('cf-turnstile-response') ?? '');
 
       if (!EMAIL.test(email)) {
-        if (error) error.hidden = false;
-        input?.focus();
+        say(msg.email);
+        input.focus();
         return;
       }
-      if (error) error.hidden = true;
+      if (!consent.checked) {
+        say(msg.noConsent);
+        consent.focus();
+        return;
+      }
+      if (!token) return say(msg.wait);
+      error.hidden = true;
 
       try {
         localStorage.setItem('optin_email', email);
@@ -97,11 +210,51 @@ const { id, source, button = 'Subscribe' } = Astro.props;
       }
 
       const substack = form.dataset.substack;
-      if (substack) {
-        // TODO: replace with POST /api/subscribe once the server route exists.
-        window.open(`${substack.replace(/\/$/, '')}/subscribe?email=${encodeURIComponent(email)}`, '_blank', 'noopener');
+      // Opened inside the click so popup blockers allow it; it is sent to Substack only after a 200.
+      const tab = substack ? window.open('', '_blank') : null;
+      button.disabled = true;
+      let status = 0;
+      let sent = false;
+      try {
+        const r = await fetch(form.dataset.api!, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            keyword: form.dataset.keyword || undefined,
+            source: form.dataset.lead,
+            consent: true,
+            turnstile: token,
+          }),
+        });
+        status = r.status;
+        if (r.ok) sent = ((await r.json()) as { sent?: boolean }).sent === true;
+      } catch {
+        // Network error or CORS: handled as a failure below.
       }
-      window.location.href = `/welcome?source=${encodeURIComponent(form.dataset.source ?? 'web')}`;
+      button.disabled = false;
+
+      if (status === 200) {
+        if (substack) {
+          if (tab) {
+            tab.opener = null;
+            tab.location.href = `${substack.replace(/\/$/, '')}/subscribe?email=${encodeURIComponent(email)}`;
+          }
+          window.location.href = `/welcome?source=${encodeURIComponent(form.dataset.source ?? 'web')}`;
+          return;
+        }
+        done.textContent = sent ? msg.sent : msg.already;
+        done.hidden = false;
+        form.dataset.sent = '';
+        return;
+      }
+
+      tab?.close();
+      const widget = form.querySelector('.cf-turnstile');
+      if (widget) (window as unknown as { turnstile?: Turnstile }).turnstile?.reset(widget);
+      say(
+        status === 400 ? msg.invalid : status === 403 ? msg.forbidden : status === 429 ? msg.limited : msg.failed,
+      );
     });
   });
 </script>

@@ -36,10 +36,12 @@ package manager: **npm** (`package-lock.json`).
 
 ## Architecture and patterns (extracted from this repo, see `docs/develop/RECOGNITION.md`)
 
-- **Static output, three routes:** `/` (`src/pages/index.astro`), `/welcome`, `/r/playbook`.
-  No adapter, no API routes, no SSR.
+- **Static output, three pages:** `/` (`src/pages/index.astro`), `/welcome`, `/guia/` (served for
+  every `/guia/<palabra>` by `public/_redirects`, which also holds the `/r/<palabra>` redirects).
+  No adapter, no API routes, no SSR. The API is the separate Worker in `api/` (`api.srperera.com`).
 - **Copy lives in data, not components:** `src/data/site.ts` exports `site`, `socials`,
-  `steps`, `series`, `latest`, `builds`, `packs`, `pricing`. A text change edits `site.ts`;
+  `steps`, `series`, `builds`, `packs`, `checkout`, `pricing` (Latest comes from the Worker's
+  `GET /posts` at runtime). A text change edits `site.ts`;
   components only render it. Page-local data (FAQ, playbook prompts) sits in the page
   frontmatter.
 - **Components:** `src/components/site/*.astro`. Zero hydration: there is no `client:` directive

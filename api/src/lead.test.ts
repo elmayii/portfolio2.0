@@ -1,7 +1,7 @@
 // Pure logic of /api/lead. Run: node --test "api/**/*.test.ts"   (Node 24 strips the types; no dependency.)
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { DAILY_CAP, guideEmail, normalizeKeyword, parseLead, underDailyCap } from './lead.ts';
+import { DAILY_CAP, guideEmail, normalizeKeyword, parseLead, toPosts, underDailyCap } from './lead.ts';
 
 const base = { email: 'Ana@Example.com ', source: 'instagram', consent: true };
 
@@ -66,4 +66,21 @@ test('guide email carries the guide link, the Substack button and the reply foot
     assert.match(part, /Responde a este correo para darte de baja o borrar tus datos\./);
   }
   assert.match(m.subject, /playbook/);
+});
+
+test('posts: Substack archive mapped to {title, subtitle, url, date, cover}, max 3, junk dropped', () => {
+  const post = (n: number, extra = {}) => ({
+    title: `T${n}`,
+    subtitle: null,
+    canonical_url: `https://srperera.substack.com/p/t${n}`,
+    post_date: '2026-10-27T15:24:09.450Z',
+    cover_image: null,
+    ...extra,
+  });
+  assert.deepEqual(toPosts([post(1, { subtitle: 'S', cover_image: 'https://img/c.png' })]), [
+    { title: 'T1', subtitle: 'S', url: 'https://srperera.substack.com/p/t1', date: '2026-10-27T15:24:09.450Z', cover: 'https://img/c.png' },
+  ]);
+  assert.equal(toPosts([post(1), post(2), post(3), post(4)]).length, 3);
+  assert.deepEqual(toPosts([null, post(1, { canonical_url: 'javascript:alert(1)' }), post(2, { title: 7 })]), []);
+  for (const bad of [null, {}, 'x', undefined]) assert.deepEqual(toPosts(bad), []);
 });

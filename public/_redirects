@@ -1,0 +1,11 @@
+# Cloudflare Pages redirects (https://developers.cloudflare.com/pages/configuration/redirects/).
+
+# /r/<palabra> -> the guide's Substack post. The guide emails link here (api/src/lead.ts). Add one line
+# per guide when it is published, before the generic rules below, e.g.:
+# /r/ejemplo https://srperera.substack.com/p/ejemplo 302
+
+# PLAYBOOK was discarded and its page removed (DECISIONS 2026-10-27).
+/r/playbook / 301
+
+# One static page serves every keyword guide; 200 = rewrite, the address bar keeps the keyword.
+/guia/:palabra /guia/ 200

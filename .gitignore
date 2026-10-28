@@ -30,3 +30,6 @@ pnpm-debug.log*
 # srperera-api (api/) local state and local-only secrets
 /api/.wrangler/
 /api/.dev.vars*
+
+# wrangler pages dev local state
+/.wrangler/

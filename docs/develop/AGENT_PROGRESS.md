@@ -3,6 +3,72 @@
 > Handoff log. One entry per meaningful step, **newest first** (the ordering is declared in the
 > protocol; never mix orderings). Do not exaggerate progress.
 
+## 2026-10-28 — Sprint 02 / Batch 05 — Capture on the site (SYS-01-B02)
+
+Status: BLOCKED — human gate: redeploy of the Worker for `GET /posts`. Everything else is done.
+Branch `cdev/sprint-02-batch-05`, cut from `cdev/sprint-02-batch-01` (`0dcbab7`, unmerged).
+
+Completed:
+- Subscribe form (`SubscribeForm.astro`): consent checkbox + Turnstile widget (real site key
+  `0x4AAAAAAFnzmCI-VUL3f-rLCNA9yyBx5rk` in `site.ts`, `PUBLIC_TURNSTILE_SITE_KEY` override);
+  `POST https://api.srperera.com/lead` `{email, source:'web', consent:true, turnstile}`; on `200` the
+  Substack subscribe tab (pre-opened in the click) + `/welcome?source=`; messages for client checks and
+  400 / 403 / 429 / network; widget reset after a failure (single-use tokens).
+- `/guia/<palabra>` (`src/pages/guia/index.astro`, Spanish, noindex, `lang="es"`): same form with
+  `guide`, `source:'tiktok'` + keyword from the URL, in-place "te lo he enviado"; `public/_redirects`
+  rewrite `/guia/:palabra /guia/ 200`.
+- `public/_redirects`: commented `/r/<palabra>` example; `/r/playbook / 301`; `src/pages/r/playbook.astro`
+  removed (DECISIONS 2026-10-27).
+- Worker `GET /posts` (`api/src/index.ts`, mapper `toPosts` in `api/src/lead.ts` + test): Substack
+  archive JSON → `[{title, subtitle, url, date, cover}]` max 3, 15-min Cache API, `200 []` on any
+  upstream failure, CORS only for `https://srperera.com` (existing wrapper); other methods 405.
+- Latest section (`Series.astro`): static `latest` removed from `site.ts`; loads `/posts`, renders up
+  to 3 cards (date · title · Read →) linking to the post; hidden when empty or unreachable.
+- Vault hidden: `<Vault />` off the home, header link removed, `/welcome` keeps only the confirmation,
+  meta description without the vault phrase. `Vault.astro` stays in the repo.
+- README (routes, env, Before launch), PRODUCT clarity map, AGENTS architecture line, DECISIONS.
+
+Verification:
+- `node --test "api/**/*.test.ts"`: pass (7/7, new `posts` test).
+- `npx tsc -p api`: pass (0 errors).
+- `npm run check`: pass (0 errors, 0 warnings, 13 hints — legacy, none in touched files).
+- `npm run build`: pass (3 pages: `/`, `/welcome`, `/guia`; sitemap lists only `/`); built HTML ships
+  the real site key; no `href="#"`; no "vault"/"member" text.
+- `npx wrangler@4 deploy --dry-run` (api/): pass (bindings unchanged, 7.83 KiB).
+- Local Worker (`wrangler dev --local`): `GET /posts` → 200, the example post mapped, ACAO
+  `https://srperera.com`, `Cache-Control: max-age=900`, 2nd call `CF-Cache-Status: HIT`; foreign
+  origin → no ACAO; `POST /posts` → 405; `/lead` unchanged (400 `invalid_email`): pass.
+- `_redirects` on `npx wrangler@4 pages dev dist`: `/r/playbook` → 301 `Location: /`;
+  `/guia/prueba` → 200 Spanish page (`lang="es"`, noindex): pass.
+- Playwright (build with the always-pass test key `1x00000000000000000000AA`, served by Pages dev),
+  1280×800 and 375×812: widget + consent visible; invalid email and missing consent show their errors;
+  a submit reached the **real** API → `403 {"ok":false,"error":"forbidden"}` (expected with the test
+  key) and showed "The human check failed"; the blank tab closed. Stubbed `/lead` (labelled): 400 and
+  429 messages; 200 → Substack tab at `/subscribe?email=…` + `/welcome/?source=hero`,
+  `optin_email` stored. `/guia/prueba`: title "Tu guía: prueba", real API 403 with
+  `{keyword:"prueba", source:"tiktok"}`, stubbed 200 → "Te lo he enviado…" / `sent:false` → "Ya te lo
+  envié hoy…"; `/guia/` and `/guia/Mal%20Palabra` → form removed + message. Home: no Vault, nav
+  Read · Builds · Work with me · Subscribe; Latest shows the example post (via the local Worker) and
+  its card opens `https://srperera.substack.com/p/convierte-una-tarea-repetitiva-en`; `[]` or a
+  failed fetch → hidden. `/r/playbook` → `/`. No horizontal scroll on any page: pass.
+  Console: only the resource errors of the deliberately provoked 403/400/429 and one Turnstile
+  `postMessage` origin warning from its own script on localhost.
+  Evidence: `logs/evidence/02-05/` (home-hero/latest/full/form-403 1280, home-hero/full 375,
+  guia 1280/375, guia-sent-375, welcome 1280/375).
+- Live `GET https://api.srperera.com/posts`: **not-run** — answers 404 until the redeploy (gate).
+  Until then the shipped Latest section stays hidden (by design).
+- Live form 200 with the real Turnstile: not-run here by design (Batch 06 acceptance).
+
+Blocked on (human gate):
+- Redeploy the Worker so `GET /posts` goes live. From `api/`: `npx wrangler@4 deploy`. Then
+  `curl -s -H "Origin: https://srperera.com" -i https://api.srperera.com/posts` → 200 with the post.
+
+Open questions:
+- `/welcome` lede still says "Your guide is on its way to your inbox", but a web sign-up has no
+  keyword, so no guide email is sent. Keep it, or change it to point at the Substack tab?
+- Header nav and footer on `/guia` are still English (Batch 02 translates).
+- Unknown `/r/<palabra>` paths fall back to Pages' default (home with 200) until their line exists.
+
 ## 2026-10-28 — Sprint 02 / Batch 01 — Fill launch placeholders (SYS-01-B02)
 
 Status: DONE

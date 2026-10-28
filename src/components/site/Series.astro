@@ -1,5 +1,5 @@
 ---
-import { series, latest } from '../../data/site';
+import { series, site } from '../../data/site';
 ---
 
 <section id="read" class="wrap series">
@@ -42,20 +42,16 @@ import { series, latest } from '../../data/site';
     }
   </div>
 
-  <div class="latest">
+  <!-- Filled from the Worker's GET /posts (newest Substack posts); stays hidden when the list is empty. -->
+  <div class="latest" data-posts={`${site.apiUrl}/posts`} hidden>
     <h2 class="eyebrow">Latest</h2>
-    {
-      latest.filter((item) => item.href).map((item) => (
-        <a href={item.href} class="item">
-          <span class="mono label">{item.label}</span>
-          <span class="title">{item.title}</span>
-          <span class:list={['mono', 'cta', { soon: item.cta === 'Soon' }]}>
-            {item.cta}
-            {item.cta !== 'Soon' && ' →'}
-          </span>
-        </a>
-      ))
-    }
+    <template>
+      <a class="item">
+        <span class="mono label"></span>
+        <span class="title"></span>
+        <span class="mono cta">Read →</span>
+      </a>
+    </template>
   </div>
 </section>
 
@@ -195,7 +191,7 @@ import { series, latest } from '../../data/site';
     color: var(--body);
   }
 
-  .latest {
+  .latest:not([hidden]) {
     display: flex;
     flex-direction: column;
     padding-top: 16px;
@@ -235,10 +231,6 @@ import { series, latest } from '../../data/site';
     color: var(--blue);
   }
 
-  .cta.soon {
-    color: var(--muted);
-  }
-
   @media (max-width: 640px) {
     .receipt {
       justify-self: start;
@@ -255,3 +247,30 @@ import { series, latest } from '../../data/site';
     }
   }
 </style>
+
+<script>
+  type Post = { title: string; url: string; date: string };
+
+  const box = document.querySelector<HTMLElement>('.latest[data-posts]');
+  const tpl = box?.querySelector('template');
+  if (box && tpl) {
+    fetch(box.dataset.posts!)
+      .then((r) => (r.ok ? (r.json() as Promise<Post[]>) : []))
+      .then((posts: Post[]) => {
+        for (const p of posts.slice(0, 3)) {
+          const a = (tpl.content.firstElementChild as HTMLAnchorElement).cloneNode(true) as HTMLAnchorElement;
+          a.href = p.url;
+          const d = new Date(p.date);
+          a.querySelector('.label')!.textContent = isNaN(+d)
+            ? ''
+            : d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }).toUpperCase();
+          a.querySelector('.title')!.textContent = p.title;
+          box.appendChild(a);
+        }
+        box.hidden = posts.length === 0;
+      })
+      .catch(() => {
+        // API down or blocked: the section stays hidden.
+      });
+  }
+</script>

@@ -7,10 +7,15 @@ export const site = {
   url: 'https://srperera.com',
   title: 'Mario Perera — Welcome to the SaaS-Killing World',
   description:
-    'I rebuild the apps you pay for with AI and show you how. Free guides, a member vault your AI installs for you, and help for teams.',
+    'I rebuild the apps you pay for with AI and show you how. Free guides, and help for teams.',
   readers: '', // reader count not given yet: the hero line is hidden while empty
   // Sign-ups also open Substack; PUBLIC_SUBSTACK_URL overrides it.
   substackUrl: import.meta.env.PUBLIC_SUBSTACK_URL || 'https://srperera.substack.com',
+  // srperera-api Worker (workspace contract sb-01-01): POST /lead, GET /posts.
+  apiUrl: 'https://api.srperera.com',
+  // Turnstile widget for srperera.com (public). PUBLIC_TURNSTILE_SITE_KEY overrides it, e.g. with Cloudflare's
+  // always-pass test key 1x00000000000000000000AA for a local preview (the real key only works on srperera.com).
+  turnstileSiteKey: import.meta.env.PUBLIC_TURNSTILE_SITE_KEY || '0x4AAAAAAFnzmCI-VUL3f-rLCNA9yyBx5rk',
 };
 
 // From the community panel (workspace contract sb-01-02); GitHub is not in the panel.
@@ -59,18 +64,6 @@ export const series = [
     formula: 'Cash for AI builders. Every Monday.',
     text: 'Hackathons, grants and credits that are open right now, checked on their official pages.',
   },
-];
-
-// Cards without an href are not rendered.
-export const latest = [
-  { label: 'RADAR #1', title: '$320K+ in cash prizes for AI builders, open this month', cta: 'Read', href: '' },
-  {
-    label: 'FREE GUIDE',
-    title: 'PLAYBOOK: 3 prompts that pick the right sales playbook for every lead',
-    cta: 'Get it',
-    href: '/r/playbook',
-  },
-  { label: 'SAAS KILL #01', title: '[Next episode title]', cta: 'Soon', href: '' },
 ];
 
 export const builds = [
