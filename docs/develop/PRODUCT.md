@@ -28,7 +28,7 @@ ABSENT areas produce open questions, never batches — inventing them is forbidd
 | Home sections (7) | DEFINED | Code, `site.ts` | — |
 | SEO head, sitemap, JSON-LD | DEFINED | `Layout.astro`, `astro.config.mjs` | — |
 | Subscribe form → `POST /lead` → Substack tab + `/welcome` | DEFINED | `SubscribeForm.astro`, contract `sb-01-01` | — |
-| `/guia/<palabra>` + `/r/<palabra>` | DEFINED | `src/pages/guia/index.astro`, `public/_redirects`, DECISIONS 2026-10-27 | Which guides exist (one `/r/` line each, target = its Substack post)? |
+| `/guia/<palabra>` + `/r/<palabra>` (+ 404 «Este post no existe») | DEFINED | `src/pages/guia/index.astro`, `src/pages/404.astro`, `public/_redirects`, DECISIONS 2026-10-27/28 | Which guides exist (one `/r/` line each, target = its Substack post)? |
 | Latest section (Worker `GET /posts`) | DEFINED | `Series.astro`, `api/src/index.ts`, contract `sb-01-01` | — |
 | `/r/playbook` guide | Removed (2026-10-28) | DECISIONS 2026-10-27: PLAYBOOK discarded; 301 to `/` | — |
 | Toolchain: Astro 7 upgrade + type gate | DEFINED | Gate audit, DECISIONS 2026-10-17 | — |

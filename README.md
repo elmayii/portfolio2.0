@@ -20,6 +20,7 @@ npm run preview    # serve dist/ locally
 | `/welcome` | Shown after the email form: confirmation |
 | `/guia/<palabra>` | Spanish keyword guide form (noindex): one static page, served for every keyword by a rewrite in `public/_redirects` |
 | `/r/<palabra>` | Redirect to the guide's Substack post: one line per guide in `public/_redirects` (`/r/playbook` → `/`, 301) |
+| any other path | `404.html` with HTTP 404 (Pages): "Este post no existe" under `/r/`, "Page not found" elsewhere |
 
 The Vault section and the member offer are hidden until the vault exists (components kept in `src/components/site/`).
 

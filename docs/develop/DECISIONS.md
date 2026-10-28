@@ -2,6 +2,20 @@
 
 > Append decisions as they are made. Format: date — decision — rationale.
 
+- 2026-10-28 — **Unknown `/r/<palabra>` shows a custom 404 "Este post no existe"** with HTTP 404 and a
+  link home; `/welcome` tells web sign-ups to confirm in the Substack tab (a web sign-up has no
+  keyword, so no guide email). — Human, relayed by the workspace coordinator (Mario: «tiene que
+  mostrar una pantalla personalizada de 404 de este post no existe»; «Sí, procede con lo que
+  propones»). Implementation (agent): one top-level `src/pages/404.astro` → `dist/404.html`, which
+  Cloudflare Pages serves with 404 for any unmatched path and which turns off its SPA fallback, so
+  every unknown path now answers 404 ("Page not found", English); an inline script switches it to the
+  Spanish post message, `lang="es"` and title for `/r/…`. A separate `dist/r/404.html` is not possible
+  from Astro pages (`r/404.astro` → `r/404/index.html`, `r/404.html.astro` → `r/404.html/index.html`),
+  and `_redirects` cannot answer 404. `_redirects` rules still run first.
+- 2026-10-28 — The Worker redeploy for `GET /posts` was approved by the human (relayed: «Te doy el ok
+  para redesplegar»), but the agent's permission system refused `npx wrangler@4 deploy` (production
+  deploy). Not worked around; the human runs it or allows it.
+
 - 2026-10-28 — Capture on the site, details the plan leaves open (agent, reversible; Sprint 02 / Batch 05):
   the form opens a blank tab **inside the click** and sends it to Substack only after `200` (closed on
   any failure), so popup blockers (Safari) do not drop the Substack step that opening after an `await`

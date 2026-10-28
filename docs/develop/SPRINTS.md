@@ -181,8 +181,9 @@ Acceptance:
 ### Batch 05 — Capture on the site
 
 Status: BLOCKED (2026-10-28) — all code and local evidence done; the only open acceptance item is the
-live `GET /posts`. Unblocks with: the human's OK to redeploy the Worker (`npx wrangler@4 deploy` in
-`api/`), then `curl https://api.srperera.com/posts` and the Latest section on the preview.
+live `GET /posts`. The human approved the redeploy (relayed by the workspace coordinator), but the
+agent's permission system refused `npx wrangler@4 deploy`. Unblocks with: the human running it from
+`api/` (`! npx wrangler@4 deploy`) or allowing it, then `curl https://api.srperera.com/posts`.
 
 System Reference: SYS-01-B02 (contracts: workspace `sb-01-01` and `sb-01-02`).
 
@@ -221,6 +222,13 @@ Acceptance:
   API (a 403 from the real API is expected with the test key — the live 200 is checked in Batch 06);
   `/guia/prueba` renders in Spanish; no Vault anywhere; `/r/playbook` → `/`; the Latest section
   shows the example post (live `/posts` after the approved redeploy) and its card opens it.
+- Added 2026-10-28 (Mario: «tiene que mostrar una pantalla personalizada de 404 de este post no
+  existe»): an `/r/<palabra>` without a `_redirects` line answers HTTP 404 with a Spanish screen
+  «Este post no existe» and a link home; other unknown paths answer 404 "Page not found"; real `/r/`
+  rules, `/r/playbook` → `/` (301) and the `/guia/:palabra` rewrite keep working (checked on
+  `npx wrangler@4 pages dev dist`, Playwright at 1280/375).
+- Added 2026-10-28 (Mario: «Sí, procede con lo que propones»): `/welcome` tells a web sign-up to
+  confirm in the Substack tab that just opened (no guide email goes out without a keyword).
 
 ### Batch 06 — Publish the new site on srperera.com
 

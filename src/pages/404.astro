@@ -1,0 +1,68 @@
+---
+// Cloudflare Pages serves this with HTTP 404 for any path without a file or a _redirects rule (a top-level
+// 404.html also turns off its SPA fallback). /r/<palabra> links come from the Spanish guide email, so an
+// unknown one gets the Spanish "post" message (DECISIONS 2026-10-28, human).
+import Layout from '../layouts/Layout.astro';
+import SiteHeader from '../components/site/SiteHeader.astro';
+import SiteFooter from '../components/site/SiteFooter.astro';
+---
+
+<Layout title="Page not found · Mario Perera" description="This page does not exist." noindex>
+  <SiteHeader />
+  <main class="wrap missing">
+    <p class="eyebrow">404</p>
+    <div data-lang="en">
+      <h1>Page not found</h1>
+      <p class="lede">This page does not exist.</p>
+      <a class="link-arrow" href="/">Go to the home page →</a>
+    </div>
+    <div data-lang="es" hidden>
+      <h1>Este post no existe</h1>
+      <p class="lede">Puede que el enlace esté mal escrito o que el post ya no esté disponible.</p>
+      <a class="link-arrow" href="/">Ir a la página de inicio →</a>
+    </div>
+  </main>
+  <SiteFooter />
+</Layout>
+
+<style>
+  .missing {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-top: 72px;
+    padding-bottom: 96px;
+  }
+
+  .missing div:not([hidden]) {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-weight: 900;
+    font-size: clamp(40px, 6vw, 80px);
+    line-height: 0.95;
+    text-transform: uppercase;
+  }
+
+  .lede {
+    margin: 0;
+    max-width: 46ch;
+    font-size: 21px;
+    color: var(--body);
+  }
+</style>
+
+<script>
+  if (location.pathname.startsWith('/r/')) {
+    document.querySelector<HTMLElement>('[data-lang="en"]')!.hidden = true;
+    document.querySelector<HTMLElement>('[data-lang="es"]')!.hidden = false;
+    document.documentElement.lang = 'es';
+    document.title = 'Este post no existe · Mario Perera';
+  }
+</script>

@@ -3,6 +3,41 @@
 > Handoff log. One entry per meaningful step, **newest first** (the ordering is declared in the
 > protocol; never mix orderings). Do not exaggerate progress.
 
+## 2026-10-28 — Sprint 02 / Batch 05 — resume: 404 screen, /welcome copy, redeploy attempt (SYS-01-B02)
+
+Status: BLOCKED — the Worker redeploy (`GET /posts` live) was approved by the human (relayed by the
+workspace coordinator) but the agent's permission system refused `npx wrangler@4 deploy`
+("Production Deploy"). Not worked around. Everything else in the batch passes.
+
+Completed:
+- `src/pages/404.astro` (human decision 2026-10-28): HTTP 404 for unknown paths; under `/r/` it
+  shows «Este post no existe» (Spanish, `lang="es"`) with «Ir a la página de inicio →»; elsewhere
+  "Page not found" + "Go to the home page →". noindex, out of the sitemap.
+- `/welcome` lede: "One last step: confirm your subscription in the Substack tab that just opened.
+  No new tab? Subscribe on Substack." (link `https://srperera.substack.com/subscribe`).
+- SPRINTS (acceptance items added, dated, citing Mario), DECISIONS, README, PRODUCT.
+
+Verification:
+- `npm run check`: pass (0 errors, 0 warnings, 13 legacy hints). `npm run build`: pass (`/`,
+  `/welcome`, `/guia`, `/404.html`; sitemap only `/`).
+- `npx wrangler@4 pages dev dist` (temporary `/r/ejemplo` line added to `dist/_redirects` only, not
+  committed): `/` 200 · `/welcome/` 200 · `/guia/prueba` 200 · `/r/noexiste` **404** ·
+  `/r/ejemplo` 302 → the Substack post · `/r/playbook` 301 → `/` · `/otra-cosa` 404 · `/r/` 404: pass.
+- Playwright 1280×800 / 375×812: `/r/noexiste` 404, Spanish h1 and title, link to `/` works;
+  `/otra-cosa` 404 "Page not found"; `/welcome` new copy; no horizontal scroll: pass. Evidence:
+  `logs/evidence/02-05/{r404,404,welcome}-{1280,375}.png`.
+- Console: Turnstile `400020` errors when the real site key renders on `127.0.0.1` (expected off
+  srperera.com; the real widget is checked live in Batch 06 — watch for this code there).
+- Worker redeploy: **not-run** (refused by the permission system). Live `GET /posts`: **not-run**
+  (still 404). Live `/lead` regression re-check: not-run (no redeploy happened; code unchanged).
+
+Blocked on (human):
+- From `api/`: `! npx wrangler@4 deploy` (or allow the agent to run it). Then:
+  `curl -s -i -H "Origin: https://srperera.com" https://api.srperera.com/posts` → 200 with the
+  example post, `Access-Control-Allow-Origin: https://srperera.com`, `Cache-Control: public, max-age=900`;
+  `curl -s -X POST https://api.srperera.com/lead -H 'Content-Type: application/json' -d '{"email":"nobody@example.com","source":"web","consent":true}'` → 403;
+  same with `"email":"nope"` → 400 `invalid_email`.
+
 ## 2026-10-28 — Sprint 02 / Batch 05 — Capture on the site (SYS-01-B02)
 
 Status: BLOCKED — human gate: redeploy of the Worker for `GET /posts`. Everything else is done.

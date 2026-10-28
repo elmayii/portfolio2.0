@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import SiteHeader from '../components/site/SiteHeader.astro';
 import SiteFooter from '../components/site/SiteFooter.astro';
+import { site } from '../data/site';
 // The member offer (perks, plans, FAQ) is hidden until the vault exists (DECISIONS 2026-10-27).
 ---
 
@@ -11,7 +12,10 @@ import SiteFooter from '../components/site/SiteFooter.astro';
     <section class="wrap intro">
       <p class="eyebrow">Subscribed</p>
       <h1>You're in.</h1>
-      <p class="lede">Your guide is on its way to your inbox. Nothing there in two minutes? Check spam and promotions.</p>
+      <p class="lede">
+        One last step: confirm your subscription in the Substack tab that just opened.
+        No new tab? <a href={`${site.substackUrl}/subscribe`}>Subscribe on Substack</a>.
+      </p>
     </section>
 
     <div class="wrap stay">
