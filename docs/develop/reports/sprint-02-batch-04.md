@@ -15,7 +15,7 @@ live check passes, including the 200 path and the email received. D1, secrets an
 | Web rate limit | binding `WEB_LIMIT`, 5 requests / 60 s per `CF-Connecting-IP`, namespace `2601` |
 | Var | `TURNSTILE_HOSTNAMES = "srperera.com"` (comma-separated list) |
 | Secrets (names only) | `LEAD_SECRET`, `TURNSTILE_SECRET` — declared in `secrets.required`, so `wrangler deploy` refuses to run while either is missing |
-| Turnstile site key | **pending** — `[TURNSTILE_SITE_KEY]` (public; Mario gives it after creating the widget) |
+| Turnstile site key | `0x4AAAAAAFnzmCI-VUL3f-rLCNA9yyBx5rk` (public; widget for `srperera.com`, given 2026-10-28) |
 
 Files: `api/wrangler.jsonc`, `api/src/index.ts` (handler), `api/src/lead.ts` (pure logic),
 `api/src/lead.test.ts`, `api/schema.sql`, `api/tsconfig.json`, `api/worker-configuration.d.ts`
@@ -83,7 +83,7 @@ External Request action:
 
 ## How the site calls it (SYS-01-B02)
 
-Turnstile widget (`data-sitekey="[TURNSTILE_SITE_KEY]"`) in the form; POST the same JSON with
+Turnstile widget (`data-sitekey="0x4AAAAAAFnzmCI-VUL3f-rLCNA9yyBx5rk"`) in the form; POST the same JSON with
 `"source":"web"` and `"turnstile": <token>` to `https://api.srperera.com/lead`. Cross-origin:
 the Worker answers the `OPTIONS` preflight (204) and adds `Access-Control-Allow-Origin:
 https://srperera.com` only for that origin. Tokens are single
