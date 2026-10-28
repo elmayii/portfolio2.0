@@ -229,7 +229,11 @@ Acceptance:
 
 ### Batch 06 — Publish the new site on srperera.com
 
-Status: PENDING
+Status: BLOCKED (2026-10-28; Pages fix committed on `cdev/sprint-02-batch-06` — `.node-version` 24.14.0;
+waiting on the human's push/merge OKs, checklist in AGENT_PROGRESS)
+
+Unblocks with: the human's OK, at that moment, for each step of the checklist (push the batch branch for
+a preview → Spanish review on the preview → fast-forward `feat/saas-killing-world-alt2` and `main` → push `main`).
 
 System Reference: SYS-01-B02.
 

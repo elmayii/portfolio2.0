@@ -3,6 +3,67 @@
 > Handoff log. One entry per meaningful step, **newest first** (the ordering is declared in the
 > protocol; never mix orderings). Do not exaggerate progress.
 
+## 2026-10-28 — Sprint 02 / Batch 06 — Publish the new site on srperera.com (SYS-01-B02)
+
+Status: BLOCKED (branch `cdev/sprint-02-batch-06`, cut from `cdev/sprint-02-batch-02` @ `67fb555`) — the
+ungated part is done; the rest is push/merge, the human's gate.
+
+Root cause of the red Pages previews (read-only API read of project `portfolio2-0`, deployments
+`96f2f62d` @ `bde6194` and `e3514e34` @ `f9cb7c2`, both `feat/saas-killing-world-alt2`, both Failure):
+```
+Detected the following tools from environment: npm@10.9.2, nodejs@22.16.0
+npm warn EBADENGINE   package: 'astro@7.4.0',
+npm warn EBADENGINE   required: { node: '>=22.22.0', npm: '>=9.6.5', pnpm: '>=7.1.0' },
+Node.js v22.16.0 is not supported by Astro!
+Please upgrade Node.js to a supported version: ">=22.22.0"
+Failed: build command exited with code: 1
+```
+Project settings (read, not changed): build image v3, `npm run build` → `dist`, no `NODE_VERSION` env var in
+preview or production. The last green alt2 preview (`82ad8fd1` @ `130c03f`) was still Astro 5 (3 pages).
+
+Completed:
+- `.node-version` = `24.14.0` at the root (the file Pages v3 reads; it ignores `package.json` `engines`).
+  Exact local version, so the local build is the Pages build. DECISIONS 2026-10-28.
+- History check: `origin/main` (`edbbc89`), local `main` (`a0a16fc`, 2 behind `origin/main`) and
+  `feat/saas-killing-world-alt2` (local `f065ddb`, origin `bde6194`) are all ancestors of this branch, so every
+  merge below is a fast-forward — no conflicts possible. The 2 commits `origin/main` has over local `main`
+  (`a550f6c` pdf update, `edbbc89` merge PR #5 `language`) are already in this line.
+
+Verification:
+- `npm ci` (Node 24.14.0): pass.
+- `npm run check`: pass (0 errors, 0 warnings, 13 legacy hints).
+- `npm run build`: pass (6 pages, sitemap created, no integration error).
+- Green Pages preview URL: not-run (needs the push, a human gate).
+- Playwright evidence: not-run (no UI change in this batch; the review happens on the preview).
+- Live check on srperera.com: not-run (after the human publishes).
+
+Publishing checklist — each step only with the human's OK at that moment, in this order:
+1. Push the batch branch to get a preview (Pages builds every branch):
+   `git push origin cdev/sprint-02-batch-06`
+   → preview at `https://cdev-sprint-02-batch-06.portfolio2-0-dqp.pages.dev` (branch alias; the per-deploy URL
+   is in `npx wrangler@4 pages deployment list --project-name portfolio2-0`). Expect the log to show
+   `nodejs@24.14.0` and `Success: Your site was deployed!`.
+2. Spanish review on that preview (list below). On the preview the form and the "Latest" section cannot work:
+   the API only allows the origin `https://srperera.com` (CORS) — check them on step 5.
+3. Fast-forward the line and push it:
+   `git checkout feat/saas-killing-world-alt2 && git merge --ff-only cdev/sprint-02-batch-06 && git push origin feat/saas-killing-world-alt2`
+4. Publish: fast-forward `main` and push it (Pages deploys `main` to srperera.com):
+   `git checkout main && git merge --ff-only cdev/sprint-02-batch-06 && git push origin main`
+5. Live check (agent, after step 4): title and no `Astro v5.9.3` generator on srperera.com, `/es/` for a
+   Spanish browser, socials as in `sb-01-02`, Latest list loads; the human submits the real form → 200 and a
+   `people` row with `source=web` in D1.
+
+Spanish review list for the human (on the step-1 preview):
+- `/es/` — every section reads naturally; prices and names unchanged; the ES/EN switch goes to `/`.
+- `/es/welcome/?source=hero` — Spanish thank-you copy; the switch keeps the query on `/welcome/?source=hero`.
+- `/guia/<palabra>` (e.g. `/guia/prueba`) — Spanish header and footer, links point to `/es/`.
+- `/es/<anything>` (e.g. `/es/nada`) — "Página no encontrada" with a link to `/es/`, HTTP 404.
+- ES/EN switch — from `/` to `/es/` and back; after choosing, a reload keeps the choice; a Spanish browser on a
+  first visit to `/` lands on `/es/`.
+
+Blockers:
+- Human OKs for steps 1, 3 and 4 (push / merge). Nothing in Cloudflare settings needs changing.
+
 ## 2026-10-28 — Sprint 02 / Batch 02 — Spanish version (SYS-01-B02)
 
 Status: DONE (branch `cdev/sprint-02-batch-02`, cut from `cdev/sprint-02-batch-05` @ `9f534aa`)

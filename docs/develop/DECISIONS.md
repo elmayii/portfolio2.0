@@ -2,6 +2,11 @@
 
 > Append decisions as they are made. Format: date — decision — rationale.
 
+- 2026-10-28 — Node pinned for Cloudflare Pages with `.node-version` = `24.14.0` (agent, reversible; Sprint 02 /
+  Batch 06). Pages build image v3 defaults to Node 22.16.0 and Astro 7.4 requires `>=22.22.0`, so every
+  `feat/saas-killing-world-alt2` preview failed (`Node.js v22.16.0 is not supported by Astro!`). The v3 image
+  reads `NODE_VERSION`, `.node-version` or `.nvmrc` and ignores `package.json` `engines`, so the file is the
+  repo-side fix (no dashboard change). Exact version = the local one, so local build = Pages build.
 - 2026-10-28 — Spanish version, details the plan leaves open (agent, reversible; Sprint 02 / Batch 02):
   `/es/` and `/es/welcome/` are two-line pages that render `../index.astro` / `../welcome.astro`, and every
   component picks its copy by `Astro.currentLocale` through `src/data/i18n.ts` (`copy(lang)`), so both
