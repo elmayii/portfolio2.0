@@ -3,6 +3,44 @@
 > Handoff log. One entry per meaningful step, **newest first** (the ordering is declared in the
 > protocol; never mix orderings). Do not exaggerate progress.
 
+## 2026-10-28 — Sprint 02 / Batch 05 — closed: live `GET /posts` (SYS-01-B02)
+
+Status: DONE
+
+Completed:
+- The human redeployed the Worker himself (`npx wrangler@4 deploy` from `api/`, version
+  `15ef985c-bd9f-41c2-aa19-137d07f436c4`, trigger `api.srperera.com` custom domain). The agent
+  re-ran the live checks; SPRINTS Batch 05 → DONE; README "Before launch" line updated.
+
+Verification (live, re-run by the agent after the deploy):
+- `GET https://api.srperera.com/posts` with `Origin: https://srperera.com`: 200,
+  `Access-Control-Allow-Origin: https://srperera.com`, `Vary: Origin`, `CF-Cache-Status: HIT`, body =
+  the example post (`Convierte una tarea repetitiva en una skill de Claude`,
+  `https://srperera.substack.com/p/convierte-una-tarea-repetitiva-en`, `cover: null`): pass.
+- Foreign origin → no `Access-Control-Allow-Origin`; `POST /posts` → 405: pass.
+- `/lead` no regression: no auth → 403 `forbidden`; `"email":"nope"` → 400 `invalid_email`;
+  `OPTIONS /lead` → 204: pass.
+- Playwright on the local Pages preview, `/posts` answered by the **live** Worker (fetched
+  server-side, CORS header added for localhost), 1280×800 and 375×812: Latest shows the example post
+  (OCT 27, 2026 · title · Read →) and the card opens the Substack post: pass. Evidence:
+  `logs/evidence/02-05/home-latest-live-{1280,375}.png`.
+- Every other acceptance item: as in the two entries below (check, build, form + widget + consent,
+  real-API 403 with the test key, `/guia/prueba`, no Vault, `/r/playbook` → `/`, 404 screens,
+  `/welcome` copy).
+
+Known (no code change in this batch):
+- The first live request right after the deploy (seen by the workspace orchestrator) answered
+  `200 []` with `Cache-Control: public, max-age=900`: the success path cached an empty list (Substack
+  answered with no posts or the edge fetch momentarily returned nothing); minutes later the post was
+  there. The Worker's edge fetch to Substack was confirmed with `wrangler dev --remote`. Possible
+  follow-up: do not cache an empty list.
+- Live responses now carry `Cache-Control: public, max-age=14400` instead of the Worker's 900, which
+  looks like a zone-level Browser Cache TTL override on `api.srperera.com`. Browsers may keep
+  `/posts` up to 4 h; worth checking in the Cloudflare dashboard (Caching → Browser Cache TTL →
+  "Respect existing headers") — a human setting.
+- Still open (not blocking): Turnstile `400020` seen with the real key on `127.0.0.1` — watch the
+  live widget in Batch 06; `/guia` header/footer English until Batch 02.
+
 ## 2026-10-28 — Sprint 02 / Batch 05 — resume: 404 screen, /welcome copy, redeploy attempt (SYS-01-B02)
 
 Status: BLOCKED — the Worker redeploy (`GET /posts` live) was approved by the human (relayed by the

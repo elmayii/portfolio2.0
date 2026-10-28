@@ -180,10 +180,7 @@ Acceptance:
 
 ### Batch 05 — Capture on the site
 
-Status: BLOCKED (2026-10-28) — all code and local evidence done; the only open acceptance item is the
-live `GET /posts`. The human approved the redeploy (relayed by the workspace coordinator), but the
-agent's permission system refused `npx wrangler@4 deploy`. Unblocks with: the human running it from
-`api/` (`! npx wrangler@4 deploy`) or allowing it, then `curl https://api.srperera.com/posts`.
+Status: DONE (2026-10-28; Worker redeployed by the human, version `15ef985c`, live `GET /posts` green)
 
 System Reference: SYS-01-B02 (contracts: workspace `sb-01-01` and `sb-01-02`).
 

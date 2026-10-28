@@ -39,7 +39,7 @@ Copy, links and prices live in `src/data/site.ts`. Components are in `src/compon
 
 - [x] Placeholders without a value are hidden (reader count, next episode, next pack)
 - [x] Real links for TikTok, X and Substack in `src/data/site.ts`
-- [x] Email form posts to `https://api.srperera.com/lead` (Turnstile + consent) — the Worker's `GET /posts` needs a redeploy
+- [x] Email form posts to `https://api.srperera.com/lead` (Turnstile + consent); Latest reads the Worker's `GET /posts`
 - [ ] Stripe checkout links on `/welcome` and the vault card (vault hidden for now)
 - [ ] PostHog with UTM capture and the event list from the plan
 - [ ] Spanish version by browser language
